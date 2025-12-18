@@ -31,7 +31,7 @@ const vectors = await client.embed(
   { apiKey: process.env.EMB_KEY as string}
 );
 
-const sims = await client.getSimilarEmbeddings(
+const sims = await client.calculateSimilarity(
   "Les routes de france",
   vectors, 
   process.env.EMB_PROVIDER as string,

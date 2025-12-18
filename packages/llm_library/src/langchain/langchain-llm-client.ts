@@ -9,7 +9,7 @@ import {
   type EmbedResult,
   type EmbedVector,
   type SimilarEmbeddingsOptions,
-  type SimilarEmbeddingsResult
+  type SimilarityResult
 
 } from "../llm-client-interface.js";
 
@@ -101,7 +101,7 @@ export default class LangchainLLMClient implements LLMClientInterface {
       return await embeddingsModel.embedDocuments(texts.map(chunk => chunk.content));
     }
 
-    async getSimilarEmbeddings(target: string, vectors: EmbedVector[], provider: string, model: string, options?: SimilarEmbeddingsOptions): Promise<SimilarEmbeddingsResult[]> {
+    async calculateSimilarity(target: string, vectors: EmbedVector[], provider: string, model: string, options?: SimilarEmbeddingsOptions): Promise<SimilarityResult[]> {
       const embeddingsModel = EmbeddingsModels.create(provider, model, options?.apiKey ?? '');
       const targetVector = await embeddingsModel.embedQuery(target);
       return vectors.map(

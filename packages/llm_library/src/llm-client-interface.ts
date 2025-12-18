@@ -29,7 +29,7 @@ export type EmbedVector = number[];
 
 export type EmbedResult = number[][];
 
-export type SimilarEmbeddingsResult = {
+export type SimilarityResult = {
   index: number;
   similarity: number;
 };
@@ -43,5 +43,5 @@ export interface LLMClientInterface {
   infer(messages: Message[], provider: string, model: string, options?: InferOptions) : Promise<InferResult>;
   inferStream(messages: Message[], provider: string, model: string, options?: InferOptions) : AsyncGenerator<InferStreamResult>;
   embed(texts: TextChunk[], provider: string, model: string, options?: EmbedOptions) : Promise<EmbedResult>;
-  getSimilarEmbeddings(target: string, vectors: EmbedVector[], provider: string, model: string, options?: SimilarEmbeddingsOptions): Promise<SimilarEmbeddingsResult[]>;
+  calculateSimilarity(target: string, vectors: EmbedVector[], provider: string, model: string, options?: SimilarEmbeddingsOptions): Promise<SimilarityResult[]>;
 }
