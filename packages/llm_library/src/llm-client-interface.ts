@@ -21,16 +21,13 @@ export type TextChunk = {
   metaData: Record<string, string>;
 };
 
-export type EmbedOptions = Record<string, unknown>;
-
-export type EmbedVector = {
-  index: number;
-  vector: number[];
+export type EmbedOptions = {
+  apiKey?: string;
 }
 
-export type EmbedResult = {
-  embeddings: EmbedVector[];
-}
+export type EmbedVector = number[];
+
+export type EmbedResult = number[][];
 
 export type SimilarEmbeddingsResult = {
   index: number;
@@ -38,14 +35,13 @@ export type SimilarEmbeddingsResult = {
 };
 
 export type SimilarEmbeddingsOptions = {
-  maxResultCount: number;
+  apiKey?: string;
+  maxResultCount?: number;
 };
 
 export interface LLMClientInterface {
   infer(messages: Message[], provider: string, model: string, options?: InferOptions) : Promise<InferResult>;
- /* 
   inferStream(messages: Message[], provider: string, model: string, options?: InferOptions) : AsyncGenerator<InferStreamResult>;
   embed(texts: TextChunk[], provider: string, model: string, options?: EmbedOptions) : Promise<EmbedResult>;
-  getSimilarEmbeddings(target: string, vectors: EmbedVector[], options?: SimilarEmbeddingsOptions): SimilarEmbeddingsResult[];
-*/
+  getSimilarEmbeddings(target: string, vectors: EmbedVector[], provider: string, model: string, options?: SimilarEmbeddingsOptions): Promise<SimilarEmbeddingsResult[]>;
 }

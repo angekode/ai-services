@@ -2,17 +2,32 @@ import {
   type LLMClientInterface,
   type Message,
   type InferOptions,
-  type InferResult
+  type InferResult,
+  type InferStreamResult,
+  type TextChunk,
+  type EmbedOptions,
+  type EmbedResult,
+  type EmbedVector,
+  type SimilarEmbeddingsOptions,
+  type SimilarEmbeddingsResult
+
 } from "../llm-client-interface.js";
 
 import ChatsModels from "./chat/chat-models.js";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { BaseMessage } from "@langchain/core/messages";
-
+import EmbeddingsModels from "../langchain/embeddings/embeddings-models.js";
+import { cosineSimilarity } from "@langchain/core/utils/math";
+import { VectorStore } from "@langchain/core/vectorstores";
 
 export default class LangchainLLMClient implements LLMClientInterface {
 
-    async infer(messages: Message[], provider: string, model: string, options?: InferOptions) : Promise<InferResult> {
+    async infer(
+      messages: Message[], 
+      provider: string, 
+      model: string, options?: InferOptions
+    ) : Promise<InferResult> {
+
       const chatModel = ChatsModels.create(provider, model, options?.apiKey ?? '');
       if (!chatModel) {
         throw new Error('Model not created');
@@ -38,6 +53,65 @@ export default class LangchainLLMClient implements LLMClientInterface {
       }
     }
 
+
+    async * inferStream(
+      messages: Message[], 
+      provider: string, model: string, 
+      options?: InferOptions
+    ) : AsyncGenerator<InferStreamResult> {
+
+      const chatModel = ChatsModels.create(provider, model, options?.apiKey ?? '');
+      if (!chatModel) {
+        throw new Error('Model not created');
+      }
+      const stream = await chatModel.stream(messages.map(m => this.langChainMessage(m)));
+      for await (const chunk of stream) {
+        if (typeof chunk.content === 'string') {
+          if (chunk.content === '') {
+            continue;
+          }
+          yield { type: 'message.delta', content: chunk.content };
+        
+        } else if (Array.isArray(chunk.content)) {
+          const text = chunk.content
+            .map((part: any) => (typeof part?.text === 'string' ? part.text : ''))
+            .join('');
+
+          if (!text) {
+            yield { type: 'error', message: 'No text content' };
+            continue;
+          }
+
+          yield { type: 'message.delta', content: text };
+          continue;
+
+        } else {
+          yield { type: 'error', message: 'No text content' };
+          continue;
+        }
+      }
+      yield { type: 'message.done' };
+      return;
+    }
+
+
+    async embed(texts: TextChunk[], provider: string, model: string, options?: EmbedOptions) : Promise<EmbedResult> {
+      const embeddingsModel = EmbeddingsModels.create(provider, model, options?.apiKey ?? '');
+      // const vectorStore = await MemoryVectorStore.fromTexts(texts.map(t => t.content), {}, embeddingsModel);
+      return await embeddingsModel.embedDocuments(texts.map(chunk => chunk.content));
+    }
+
+    async getSimilarEmbeddings(target: string, vectors: EmbedVector[], provider: string, model: string, options?: SimilarEmbeddingsOptions): Promise<SimilarEmbeddingsResult[]> {
+      const embeddingsModel = EmbeddingsModels.create(provider, model, options?.apiKey ?? '');
+      const targetVector = await embeddingsModel.embedQuery(target);
+      return vectors.map(
+        (vector, index) => ({
+          index: index,
+          similarity: cosineSimilarity([vector], [targetVector])[0]![0]!
+        })
+      ).toSorted((resA, resB) => resB.similarity - resA.similarity)
+      .slice(0,options?.maxResultCount ?? vectors.length);
+    }
 
     private langChainMessage(message: Message) :  BaseMessage  {
       switch (message.role) {
