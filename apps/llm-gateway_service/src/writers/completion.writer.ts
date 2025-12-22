@@ -50,7 +50,9 @@ export function writeOutputRequest_Completion(res: Response, internalRequest: In
   };
 
   for (const [key, value] of Object.entries(internalRequest.context)) {
-    res.setHeader(key, value);
+    if (value) {
+      res.setHeader(key, value);
+    }
   }
   res.setHeader('Content-Type', 'application/json');
   res.status(200);
