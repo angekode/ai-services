@@ -8,7 +8,11 @@ import type { OutputRequest_ErrorBody_Type } from '../requests/output.request.js
  */
 export function writeOutputRequest_Error(res : Response, message: string, type: string) {
   const context = res.locals?.ir?.context;
-  if (context) {
+  /*
+    Si jamais une exception est levée pendant un stream,
+    alors les headers sont déjà envoyés donc on vérifie headersSent.
+  */
+  if (context && !res.headersSent) {
     for (const [key, value] of Object.entries(context)) {
       if (typeof value === 'string') {
         res.setHeader(key, value);
