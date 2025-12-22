@@ -4,6 +4,7 @@ import { ProviderError, ServerError } from '../error.js';
 import type { InternalRequest } from '../requests/internal.request.js';
 import { generateCompletion, generateCompletionStream } from '../services/llm.service.js';
 import { writeOutputRequest_Completion, writeOutputRequests_StreamCompletion } from '../writers/completion.writer.js';
+import { StatusCodes } from 'http-status-codes';
 
 
 export async function handleCompletionRequest(_req: Request, res: Response, next: NextFunction) {
@@ -19,6 +20,7 @@ export async function handleCompletionRequest(_req: Request, res: Response, next
 
     if (ir.input.stream) {
       const stream = generateCompletionStream(ir);
+      res.status(StatusCodes.OK);
       await writeOutputRequests_StreamCompletion(res, ir, stream);
 
     } else {
@@ -28,6 +30,7 @@ export async function handleCompletionRequest(_req: Request, res: Response, next
         return;
       }
 
+      res.status(StatusCodes.OK);
       writeOutputRequest_Completion(res, ir, result);
       res.end();
       return;
