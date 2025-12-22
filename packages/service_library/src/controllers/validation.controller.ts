@@ -18,7 +18,7 @@ export function validateChatCompletionHeader(req: Request, res: Response, next: 
   if (keyBearer) {
     const matches = keyBearer.match(/^Bearer\s(.+)$/);
     if (!matches || !matches[1]) {
-      throw new BadInputError('Format de la clé Bearer invalide');
+      return next(new BadInputError('Format de la clé Bearer invalide'));
     }
     input.key = matches[1];
   }
@@ -29,7 +29,7 @@ export function validateChatCompletionHeader(req: Request, res: Response, next: 
 
 export function validateChatCompletionBody(req: Request, res: Response, next: NextFunction) {
   if (!req.body) {
-    throw new BadInputError('Pas de données dans le body');
+    next(new BadInputError('Pas de données dans le body'));
   }
   parseInputRequest_completionBody(req, res.locals.ir);
   next();

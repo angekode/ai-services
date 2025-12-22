@@ -20,7 +20,7 @@ import zod from 'zod';
  */
 const ChatCompletionRequestMessage_Scheme = zod.object({
   content: zod.string(), // The contents of the user message. (openai: string ou array[ChatCompletionRequestUserMessageContentPartChatCompletionRequestUserMessageContentPart])
-  role: zod.literal(['user', 'system', 'assistant'])
+  role: zod.enum(['user', 'system', 'assistant'])
   // ** name
 });
 
