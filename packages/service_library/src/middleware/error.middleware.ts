@@ -1,9 +1,8 @@
-import type { Request, Response, NextFunction } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import type { OutputRequest_ErrorBody_Type } from '../requests/output.request.js';
 import { BadInputError, ServerError, ProviderError } from '../error.js';
-
+import { writeOutputRequest_Error } from '../writers/errors.writer.js';
 
 export function handleError(error: any, _req: Request, res: Response, _next: NextFunction) {
   if (error instanceof BadInputError) {
@@ -19,15 +18,6 @@ export function handleError(error: any, _req: Request, res: Response, _next: Nex
     res.status(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
-  const e : OutputRequest_ErrorBody_Type = {
-    error: {
-      code:  null,
-      message: error.message,
-      param: null,
-      type: error.name
-    }
-  };
-
-  res.json(e);
-  return;
+  writeOutputRequest_Error(res, error.message, error.name);
+  res.end();
 }
