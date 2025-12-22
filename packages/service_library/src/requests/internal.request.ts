@@ -24,9 +24,9 @@ export function createInternalRequestInput() : InternalRequestInput {
 
 
 export type InternalRequestContext = {
-  'traceparent': string,
-  'x-run-id': string,
-  'x-user-id': string
+  'traceparent': string | undefined,
+  'x-run-id': string | undefined,
+  'x-user-id': string | undefined
 };
 
 export type InternalRequestError = {

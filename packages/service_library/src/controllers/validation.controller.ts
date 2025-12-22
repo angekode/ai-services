@@ -8,9 +8,9 @@ import { BadInputError } from '../error.js';
 export function validateChatCompletionHeader(req: Request, res: Response, next: NextFunction) {
   res.locals.ir = createInternalRequest();
   res.locals.ir.context = {
-    'traceparent': req.headers['traceparent'],
-    'x-run-id': req.headers['x-run-id'],
-    'x-user-id': req.headers['x-user-id']
+    'traceparent': getStringHeader(req, 'traceparent'),
+    'x-run-id': getStringHeader(req, 'x-run-id'),
+    'x-user-id': getStringHeader(req, 'x-user-id')
   };
   const input = createInternalRequestInput();
 
@@ -33,4 +33,14 @@ export function validateChatCompletionBody(req: Request, res: Response, next: Ne
   }
   parseInputRequest_completionBody(req, res.locals.ir);
   next();
+}
+
+
+function getStringHeader(req: Request, name: string) : string | undefined {
+  const value = req.headers[name];
+  if (typeof value === 'string') {
+    return value;
+  } else {
+    return undefined;
+  }
 }
