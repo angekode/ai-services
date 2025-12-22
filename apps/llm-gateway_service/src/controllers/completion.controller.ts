@@ -1,10 +1,9 @@
 import type { Request, Response, NextFunction } from 'express';
 
-import { ServerError } from '../error.js';
+import { ProviderError, ServerError } from '../error.js';
 import type { InternalRequest } from '../requests/internal.request.js';
 import { generateCompletion, generateCompletionStream } from '../services/llm.service.js';
 import { writeOutputRequest_Completion, writeOutputRequests_StreamCompletion } from '../writers/completion.writer.js';
-import { writeOutputRequest_Error } from '../writers/errors.writer.js';
 
 
 export async function handleCompletionRequest(_req: Request, res: Response, next: NextFunction) {
@@ -25,8 +24,7 @@ export async function handleCompletionRequest(_req: Request, res: Response, next
     } else {
       const result = await generateCompletion(ir);
       if (result.type === 'error') {
-        writeOutputRequest_Error(res, ir, 'erreur');
-        res.end();
+        next(new ProviderError(result.message));
         return;
       }
 
