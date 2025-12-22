@@ -39,7 +39,7 @@ export function writeOutputRequest_Completion(res: Response, internalRequest: In
         finish_reason: 'stop'
       }
     ],
-    created: Date.now(),
+    created: Date.now() / 1000,
     model: internalRequest.input.model,
     object: 'chat.completion',
     usage: {
