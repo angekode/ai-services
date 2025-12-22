@@ -5,6 +5,14 @@ import { BadInputError, ServerError, ProviderError } from '../error.js';
 import { writeOutputRequest_Error } from '../writers/errors.writer.js';
 
 export function handleError(error: any, _req: Request, res: Response, _next: NextFunction) {
+  /*
+    Si jamais une exception est levée pendant un stream,
+    alors les headers sont déjà envoyés.
+  */
+  if (res.headersSent) {
+    return res.end();
+  }
+
   if (error instanceof BadInputError) {
     res.status(StatusCodes.BAD_REQUEST);
 
