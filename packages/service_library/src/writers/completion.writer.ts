@@ -88,7 +88,7 @@ export async function  writeOutputRequests_StreamCompletion(res: Response, inter
         id: chunk.id ?? '',
         choices: [{
           index: 0,
-          delta: { role: 'assitant', content: chunk.content },
+          delta: { role: 'assistant', content: chunk.content },
           finish_reason: 'stop'
         }],
         created: Date.now() / 1000,
