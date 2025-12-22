@@ -8,11 +8,19 @@ export type InferOptions = {
 };
 
 export type InferResult = 
-  { type: 'message',  content: string } |
-  { type: 'error', message: string };
+{ 
+  type: 'message',
+  content: string,
+  metadata: Record<string, any>,
+  id: string | undefined,
+} |
+{ 
+  type: 'error',
+  message: string 
+};
 
 export type InferStreamResult = 
-  { type: "message.delta", content: string } | 
+  { type: "message.delta", content: string, metadata: Record<string, any>, id: string | undefined } | 
   { type: "message.done" } |
   { type: "error", message: string };
 
@@ -34,7 +42,7 @@ export type SimilarityResult = {
   similarity: number;
 };
 
-export type SimilarEmbeddingsOptions = {
+export type SimilarEmbeddingsOptions = { 
   apiKey?: string;
   maxResultCount?: number;
 };

@@ -35,7 +35,12 @@ export default class LangchainLLMClient implements LLMClientInterface {
       const chunk = await chatModel.invoke(messages.map(m => this.langChainMessage(m)));
 
       if (typeof chunk.content === 'string') {
-        return { type: 'message', content: chunk.content };
+        return { 
+          type: 'message', 
+          content: chunk.content, 
+          metadata: chunk.response_metadata,
+          id: chunk.id
+        };
       
       } else if (Array.isArray(chunk.content)) {
         const text = chunk.content
@@ -46,7 +51,12 @@ export default class LangchainLLMClient implements LLMClientInterface {
           return { type: 'error', message: 'No text content' };
         }
 
-        return { type: 'message', content: text };
+        return { 
+          type: 'message', 
+          content: text, 
+          metadata: chunk.response_metadata,
+          id: chunk.id 
+        };
 
       } else {
         return { type: 'error', message: 'No text content' };
@@ -70,7 +80,7 @@ export default class LangchainLLMClient implements LLMClientInterface {
           if (chunk.content === '') {
             continue;
           }
-          yield { type: 'message.delta', content: chunk.content };
+          yield { type: 'message.delta', content: chunk.content, metadata: chunk.response_metadata, id: chunk.id };
         
         } else if (Array.isArray(chunk.content)) {
           const text = chunk.content
@@ -82,7 +92,7 @@ export default class LangchainLLMClient implements LLMClientInterface {
             continue;
           }
 
-          yield { type: 'message.delta', content: text };
+          yield { type: 'message.delta', content: text, metadata: chunk.response_metadata, id: chunk.id };
           continue;
 
         } else {
