@@ -104,7 +104,7 @@ type CompletionUsage_Type = {
 
 // #/components/schemas/ChatCompletionStreamResponseDelta (35358)
 type ChatCompletionStreamResponseDelta_Type = {
-  role: 'developper' | 'system' | 'user' | 'assitant' | 'tool',
+  role: 'developper' | 'system' | 'user' | 'assistant' | 'tool',
   content: string | null, // content of the message
   // function_call
   // tool_calls

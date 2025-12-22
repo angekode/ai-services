@@ -30,6 +30,7 @@ export function validateChatCompletionHeader(req: Request, res: Response, next: 
 export function validateChatCompletionBody(req: Request, res: Response, next: NextFunction) {
   if (!req.body) {
     next(new BadInputError('Pas de données dans le body'));
+    return;
   }
   parseInputRequest_completionBody(req, res.locals.ir);
   next();
