@@ -1,5 +1,5 @@
 {
-  "model": "openrouter_openai_gpt-oss-20b:free",
+  "model": "openrouter/openai/gpt-oss-20b:free",
   "input": [
     {
       "role": "user",

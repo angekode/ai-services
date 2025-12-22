@@ -2,7 +2,7 @@ import type { Response } from 'express';
 
 import { ServerError } from '../error.js';
 import type { InternalRequest } from '../requests/internal.request.js';
-import type { OutputRequest_CompletionBody_Type } from '../requests/output.request.js';
+import type { OutputRequest_CompletionBody_Type, OutputRequest_StreamCompletionBody_Type } from '../requests/output.request.js';
 import type { CompletionResult, CompletionStreamResult } from '../services/llm.service.js';
 
 
@@ -55,7 +55,6 @@ export function writeOutputRequest_Completion(res: Response, internalRequest: In
     }
   }
   res.setHeader('Content-Type', 'application/json');
-  res.status(200);
   res.write(JSON.stringify(bodyContent));
   return;
 }
@@ -84,7 +83,29 @@ export async function  writeOutputRequests_StreamCompletion(res: Response, inter
   res.flushHeaders(); // envoie les headers immédiatement et pas seulement au moment du 1er write (important pour 'text/event-stream')
 
   for await (const chunk of stream) {
-    res.write(JSON.stringify(chunk));
+    if (chunk.type === 'message.delta') {
+      const bodyContent : OutputRequest_StreamCompletionBody_Type = {
+        id: chunk.id ?? '',
+        choices: [{
+          index: 0,
+          delta: { role: 'assitant', content: chunk.content },
+          finish_reason: 'stop'
+        }],
+        created: Date.now() / 1000,
+        model: internalRequest.input?.model ?? '',
+        object: 'chat.completion',
+        usage: {
+          completion_tokens: chunk.metadata?.tokenUsage?.completionTokens ?? 0,
+          prompt_tokens: chunk.metadata?.tokenUsage?.promptTokens ?? 0,
+          total_tokens: chunk.metadata?.tokenUsage?.totalTokens ?? 0
+        }
+      };
+
+      res.write(`data: ${JSON.stringify(bodyContent)}\n\n`);
+
+    } else if (chunk.type === 'message.done') {
+      res.write('data: [DONE]\n\n');
+    }
   }
 
   res.end();
