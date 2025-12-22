@@ -7,29 +7,35 @@ import { writeOutputRequest_Completion, writeOutputRequests_StreamCompletion } f
 import { writeOutputRequest_Error } from '../writers/errors.writer.js';
 
 
-export async function handleCompletionRequest(_req: Request, res: Response) {
+export async function handleCompletionRequest(_req: Request, res: Response, next: NextFunction) {
   if (!res.locals.ir) {
-    throw new ServerError('Pas d\'objet InternalRequest dans l\'objet Response');
+    return next(new ServerError('Pas d\'objet InternalRequest dans l\'objet Response'));
   }
   const ir : InternalRequest = res.locals.ir;
   if (!ir.input) {
-    throw new ServerError('Pas d\'objet InternalRequestInput dans l\'objet InternalRequest');
+    return next(new ServerError('Pas d\'objet InternalRequestInput dans l\'objet InternalRequest'));
   }
 
-  if (ir.input.stream) {
-    const stream = generateCompletionStream(ir);
-    await writeOutputRequests_StreamCompletion(res, ir, stream);
+  try {
 
-  } else {
-    const result = await generateCompletion(ir);
-    if (result.type === 'error') {
-      writeOutputRequest_Error(res, ir, 'erreur');
+    if (ir.input.stream) {
+      const stream = generateCompletionStream(ir);
+      await writeOutputRequests_StreamCompletion(res, ir, stream);
+
+    } else {
+      const result = await generateCompletion(ir);
+      if (result.type === 'error') {
+        writeOutputRequest_Error(res, ir, 'erreur');
+        res.end();
+        return;
+      }
+
+      writeOutputRequest_Completion(res, ir, result);
       res.end();
       return;
     }
 
-    writeOutputRequest_Completion(res, ir, result);
-    res.end();
-    return;
+  } catch (error) {
+    return next(error);
   }
 }
