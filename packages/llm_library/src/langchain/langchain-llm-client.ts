@@ -18,8 +18,13 @@ import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages
 import { BaseMessage } from "@langchain/core/messages";
 import EmbeddingsModels from "../langchain/embeddings/embeddings-models.js";
 import { cosineSimilarity } from "@langchain/core/utils/math";
-import { VectorStore } from "@langchain/core/vectorstores";
 
+
+/**
+ * Permet d'envoyer des requêtes et recevoir des réponses d'inférence et d'embeddings
+ * sur des API de LLM de manière générique en indiquant le nom du fournisseur et du 
+ * modèle en chaines de caractère.
+ */
 export default class LangchainLLMClient implements LLMClientInterface {
 
     async infer(
@@ -79,8 +84,7 @@ export default class LangchainLLMClient implements LLMClientInterface {
         provider, 
         model, 
         options?.apiKey ?? '', 
-        options?.gatewayUrl ? { gatewayUrl: options.gatewayUrl } : undefined
-      );
+        options?.gatewayUrl ? { gatewayUrl: options.gatewayUrl } : undefined);
       if (!chatModel) {
         throw new Error('Model not created');
       }
