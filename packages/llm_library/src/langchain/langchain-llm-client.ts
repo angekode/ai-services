@@ -28,7 +28,12 @@ export default class LangchainLLMClient implements LLMClientInterface {
       model: string, options?: InferOptions
     ) : Promise<InferResult> {
 
-      const chatModel = ChatsModels.create(provider, model, options?.apiKey ?? '');
+      const chatModel = ChatsModels.create(
+        provider,
+        model,
+        options?.apiKey ?? '',
+        options?.gatewayUrl ? { gatewayUrl: options.gatewayUrl } : undefined
+      );
       if (!chatModel) {
         throw new Error('Model not created');
       }
@@ -70,7 +75,12 @@ export default class LangchainLLMClient implements LLMClientInterface {
       options?: InferOptions
     ) : AsyncGenerator<InferStreamResult> {
 
-      const chatModel = ChatsModels.create(provider, model, options?.apiKey ?? '');
+      const chatModel = ChatsModels.create(
+        provider, 
+        model, 
+        options?.apiKey ?? '', 
+        options?.gatewayUrl ? { gatewayUrl: options.gatewayUrl } : undefined
+      );
       if (!chatModel) {
         throw new Error('Model not created');
       }

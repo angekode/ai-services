@@ -4,7 +4,8 @@ export type Message = {
 };
 
 export type InferOptions = {
-  apiKey?: string;
+  apiKey?: string,
+  gatewayUrl?: string
 };
 
 export type InferResult = 
