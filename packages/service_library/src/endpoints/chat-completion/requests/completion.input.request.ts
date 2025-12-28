@@ -56,7 +56,6 @@ export const inputRequestHeaders_Completion_Scheme = zod.object({
   'authorization': zod.string().optional()
 });
 
-
 /**
  * Format des entêtes
  */
