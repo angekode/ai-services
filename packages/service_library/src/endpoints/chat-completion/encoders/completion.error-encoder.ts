@@ -41,7 +41,7 @@ export class CompletionErrorEncoder implements ErrorEncoder<Response> {
           code: '',
           message: error,
           param: '',
-          type: 'string'
+          type: 'unknown'
         }
       };
       res.status(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -55,7 +55,7 @@ export class CompletionErrorEncoder implements ErrorEncoder<Response> {
           code: '',
           message: String(error),
           param: '',
-          type: 'string'
+          type: 'unknown'
         }
       };
       res.status(StatusCodes.INTERNAL_SERVER_ERROR);
