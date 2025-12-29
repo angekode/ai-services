@@ -1,6 +1,4 @@
 node_modules
 dist
-.env
-test/curl.md
 AGENTS.md
 .vscode
