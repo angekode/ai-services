@@ -16,7 +16,10 @@
     "@types/express": "^5.0.6",
     "express": "^5.2.1",
     "http-status-codes": "^2.3.0",
+    "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
     "rag_library": "file:../rag_library",
+    "sequelize": "^6.37.7",
     "service_library": "file:../service_library",
     "zod": "^4.2.1"
   }

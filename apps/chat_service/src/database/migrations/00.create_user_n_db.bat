@@ -1,0 +1,2 @@
+psql -U postgres -c "CREATE USER chatservice WITH PASSWORD 'chatservice';"
+psql -U postgres -c "CREATE DATABASE chatservice WITH OWNER chatservice;"
