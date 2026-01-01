@@ -1,7 +1,7 @@
 import express from 'express';
 import { completionController } from './endpoints/chat-completion/controllers/completion.controller.js';
 import { getUserFromUserNameController } from './endpoints/users/contollers.js';
-
+import { getConversationsFromUserId } from './endpoints/conversations/contollers.js';
 
 
 // Serveur
@@ -14,6 +14,7 @@ server.use((req, _res, next) => { console.log('Requête reçue: ' + req.url); ne
 server.get('/', (_req, res) => res.send('Serveur à l\'écoute'));
 server.post('/chat/completions', completionController);
 server.get('/users/:username', getUserFromUserNameController);
+server.get('/users/:userId/conversations', getConversationsFromUserId);
 
 // Serveur - Lancement
 server.listen(process.env.PORT, () => console.log(`Serveur lancé sur le port ${process.env.PORT}`));

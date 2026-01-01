@@ -21,6 +21,6 @@
     "rag_library": "file:../rag_library",
     "sequelize": "^6.37.7",
     "service_library": "file:../service_library",
-    "zod": "^4.2.1"
+    "zod": "^4.3.4"
   }
 }
