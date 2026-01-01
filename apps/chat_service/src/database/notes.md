@@ -25,7 +25,7 @@ message(role, content, -conversation_id)
 
 
 infos sur un utilisateur
-  GET /users/username
+  GET /users/:username
 pour un utilisateur => liste des conversations
   GET /user/:id/conversations
 pour un utilisateur => une conversation par son id
