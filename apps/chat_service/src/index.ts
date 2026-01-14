@@ -8,6 +8,7 @@ import {
   createConversation 
 } from './endpoints/conversations/contollers.js';
 
+import { conversationCompletionController } from './endpoints/conversation-completion/controller.js';
 
 // Serveur
 const server = express();
@@ -23,6 +24,7 @@ server.get('/users/:userId/conversations', getConversationsFromUserId);
 server.get('/conversations/:conversationId/messages', getMessagesFromConversationId);
 
 server.post('/conversations', createConversation);
+server.post('/conversations/:conversationId/messages:complete', conversationCompletionController);
 
 // Serveur - Lancement
 server.listen(process.env.PORT, () => console.log(`Serveur lancé sur le port ${process.env.PORT}`));
