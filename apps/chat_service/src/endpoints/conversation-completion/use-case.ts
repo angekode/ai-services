@@ -32,7 +32,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
       throw new ServerError(`Conversation non trouvée: ${command.conversationId}`);
     }
     let messages : Message[] = conversations.map(m => { 
-      if (['user', 'system', 'assistant'].includes(m.role)) {
+      if (!['user', 'system', 'assistant'].includes(m.role)) {
         throw new ServerError('Role de message invalide');
       }
       return {

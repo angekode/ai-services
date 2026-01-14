@@ -44,8 +44,7 @@ export class MessageModel extends SequelizeBaseModel<MessageEntry, number, AddMe
       {
         role: {
             type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
+            allowNull: false
         },
         content: {
             type: DataTypes.TEXT,

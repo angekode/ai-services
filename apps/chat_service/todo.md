@@ -3,8 +3,8 @@
 ## Priorité Haute (Critique)
 
 ### Bugs Critiques
-- [ ] Corriger la validation des rôles dans `conversation-completion/use-case.ts` (ligne 35) : la condition est inversée
-- [ ] Supprimer la contrainte `unique` sur le champ `role` dans `message.model.ts` (plusieurs messages peuvent avoir le même rôle)
+- [x] Corriger la validation des rôles dans `conversation-completion/use-case.ts` (ligne 35) : la condition est inversée
+- [x] Supprimer la contrainte `unique` sur le champ `role` dans `message.model.ts` (plusieurs messages peuvent avoir le même rôle)
 
 ### Sécurité
 - [ ] Implémenter le hashage des mots de passe (bcrypt) au lieu du stockage en clair
