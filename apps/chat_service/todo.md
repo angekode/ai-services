@@ -20,7 +20,7 @@
 
 ### Améliorations Architecturales
 - [ ] Ajouter un middleware de logging structuré
-- [ ] Centraliser la gestion d'erreurs avec codes HTTP appropriés
+- [x] Centraliser la gestion d'erreurs avec codes HTTP appropriés
 - [ ] Implémenter le versioning d'API (préfixe `/v1/`)
 - [ ] Utiliser un système de configuration centralisé (dotenv + validation Zod)
 

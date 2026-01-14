@@ -1,6 +1,7 @@
 import express from 'express';
 import { completionController } from './endpoints/chat-completion/controllers/completion.controller.js';
 import { getUserFromUserNameController } from './endpoints/users/contollers.js';
+import { errorHandler } from './error.handler.js';
 
 import { 
   getConversationsFromUserId, 
@@ -25,6 +26,11 @@ server.get('/conversations/:conversationId/messages', getMessagesFromConversatio
 
 server.post('/conversations', createConversation);
 server.post('/conversations/:conversationId/messages:complete', conversationCompletionController);
+
+
+// Gestion de toutes les expceptions envoyées depuis les controlleurs (synchrones et asynchrones)
+server.use(errorHandler);
+
 
 // Serveur - Lancement
 server.listen(process.env.PORT, () => console.log(`Serveur lancé sur le port ${process.env.PORT}`));

@@ -2,32 +2,31 @@ import { type Request, type Response } from 'express';
 import dbClient from '../../database/client.js';
 import zod, { ZodError } from 'zod';
 import { StatusCodes } from 'http-status-codes';
+import { BadInputError } from 'service_library';
 
 
 const createConversationScheme = zod.object({ title: zod.string(), user_id: zod.number() });
 
 export async function createConversation(req: Request, res: Response) : Promise<void> {
   if (!req.body) {
-    res.status(400);
-    res.send({ error: 'Mauvais format de données'});
+    throw new BadInputError('Mauvais format de données ou json manquant');
+  }
+
+  //try {
+    
+  const bodyJson = createConversationScheme.parse(req.body);
+  const newConversation = dbClient.conversationModel?.addEntry(bodyJson);
+
+  if (!newConversation) {
+    res.status(500);
+    res.send({ error: 'Erreur interne'});
     return;
   }
 
-  try {
-    
-    const bodyJson = createConversationScheme.parse(req.body);
-    const newConversation = dbClient.conversationModel?.addEntry(bodyJson);
-
-    if (!newConversation) {
-      res.status(500);
-      res.send({ error: 'Erreur interne'});
-      return;
-    }
-
-    res.status(200);
-    res.send(newConversation);
-    return;
-
+  res.status(200);
+  res.send(newConversation);
+  return;
+/*
   } catch(error) {
     if (error instanceof ZodError) {
       res.status(StatusCodes.BAD_REQUEST);
@@ -45,22 +44,18 @@ export async function createConversation(req: Request, res: Response) : Promise<
       return;
     }
   }
-
+*/
 }
 
 export async function getConversationsFromUserId(req: Request, res: Response): Promise<void> {
   if (typeof req.params.userId !== 'string') {
-    res.status(400);
-    res.send({error: 'Id utilisateur manquant'});
-    return;
+    throw new BadInputError('Id utilisateur manquant');
   }
   if (!req.params.userId.match(/^\d+$/)) {
-    res.status(400);
-    res.send({error: 'Nom d\'utilisateur invalide'});
-    return;
+    throw new BadInputError('Nom d\'utilisateur invalide');
   }
 
-  try {
+  //try {
  
     const conversations = await dbClient.conversationModel?.getEntries({ user_id: Number(req.params.userId) });
     if (!conversations) {
@@ -73,7 +68,7 @@ export async function getConversationsFromUserId(req: Request, res: Response): P
     res.send(conversations);
     return;
 
-      
+   /*   
   } catch (error) {
     if (error instanceof Error) {
       res.send({ error: error.message });
@@ -82,23 +77,19 @@ export async function getConversationsFromUserId(req: Request, res: Response): P
 
     res.send({ error: String(error) });
     return;
-  }
+  }*/
 }
 
 
 export async function getMessagesFromConversationId(req: Request, res: Response): Promise<void> {
-    if (typeof req.params.conversationId !== 'string') {
-    res.status(400);
-    res.send({error: 'Id conversation manquant'});
-    return;
+  if (typeof req.params.conversationId !== 'string') {
+    throw new BadInputError('Id conversation manquant');
   }
   if (!req.params.conversationId.match(/^\d+$/)) {
-    res.status(400);
-    res.send({error: 'Id conversation invalide'});
-    return;
+    throw new BadInputError('Id conversation manquant');
   }
 
-  try {
+  //try {
  
     const conversations = await dbClient.messageModel?.getEntries({ conversation_id: Number(req.params.conversationId) });
     if (!conversations) {
@@ -111,7 +102,7 @@ export async function getMessagesFromConversationId(req: Request, res: Response)
     res.send(conversations);
     return;
 
-      
+      /*
   } catch (error) {
     if (error instanceof Error) {
       res.send({ error: error.message });
@@ -120,5 +111,5 @@ export async function getMessagesFromConversationId(req: Request, res: Response)
 
     res.send({ error: String(error) });
     return;
-  }
+  }*/
 }
