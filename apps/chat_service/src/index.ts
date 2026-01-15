@@ -1,4 +1,8 @@
 import express from 'express';
+import dotenv from 'dotenv';
+import zod, { ZodError } from 'zod';
+
+import { initDatabase } from './database/client.js';
 import { completionController } from './endpoints/chat-completion/controllers/completion.controller.js';
 import { getUserFromUserNameController } from './endpoints/users/contollers.js';
 import { errorHandler } from './error.handler.js';
@@ -10,6 +14,33 @@ import {
 } from './endpoints/conversations/contollers.js';
 
 import { conversationCompletionController } from './endpoints/conversation-completion/controller.js';
+
+
+// Configuration
+const envScheme = zod.object({
+  PORT : zod.string(),
+  PG_DATABASE_URL : zod.url(),
+  LLM_PROVIDER : zod.string(),
+  LLM_MODEL : zod.string(),
+  LLM_KEY : zod.string(),
+});
+
+dotenv.config();
+
+try {
+  envScheme.parse(process.env);
+} catch (error: unknown) {
+  if (error instanceof ZodError) {
+    console.error('Fichier de variables d\'environnement invalide:');
+    console.error(error.issues.map(issue => `${issue.path} : ${issue.message}`));
+    process.exit();
+  }
+}
+
+
+// Base de données
+initDatabase();
+
 
 // Serveur
 const server = express();

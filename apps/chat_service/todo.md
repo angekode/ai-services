@@ -9,7 +9,7 @@
 ### Sécurité
 - [ ] Implémenter le hashage des mots de passe (bcrypt) au lieu du stockage en clair
 - [ ] Ajouter un système d'authentification (JWT) avec middleware
-- [ ] Valider les variables d'environnement au démarrage de l'application
+- [x] Valider les variables d'environnement au démarrage de l'application
 
 ## Priorité Moyenne
 
@@ -22,7 +22,7 @@
 - [ ] Ajouter un middleware de logging structuré
 - [x] Centraliser la gestion d'erreurs avec codes HTTP appropriés
 - [ ] Implémenter le versioning d'API (préfixe `/v1/`)
-- [ ] Utiliser un système de configuration centralisé (dotenv + validation Zod)
+- [x] Utiliser un système de configuration centralisé (dotenv + validation Zod)
 
 ## Priorité Basse
 
