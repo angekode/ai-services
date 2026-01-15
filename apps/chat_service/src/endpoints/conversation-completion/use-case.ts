@@ -58,6 +58,23 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
         throw new ProviderError(result.message);
       }
 
+      // Enregistrement des messages d'entrée dans l'historique
+      for (const inputMessage of command.messages) {
+        dbClient.messageModel?.addEntry({
+          role: inputMessage.role,
+          content: inputMessage.content,
+          conversation_id: Number(command.conversationId)
+        });
+      }
+      
+      // Enregistrement du message de réponse dans l'historique
+      dbClient.messageModel?.addEntry({
+        role: 'assistant',
+        content: result.content,
+        conversation_id: Number(command.conversationId)
+      });
+
+
       return {
         kind: 'single',
         value: {
@@ -77,6 +94,15 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
         process.env.LLM_MODEL,
         process.env.LLM_KEY  ? { apiKey: process.env.LLM_KEY } : {}
       );
+
+      // Enregistrement des messages d'entrée dans l'historique
+      for (const inputMessage of command.messages) {
+        dbClient.messageModel?.addEntry({
+          role: inputMessage.role,
+          content: inputMessage.content,
+          conversation_id: Number(command.conversationId)
+        });
+      }
 
       return {
         kind: 'stream',
