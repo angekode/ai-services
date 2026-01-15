@@ -44,5 +44,5 @@
 
 ## Notes Supplémentaires
 - Clarifier la différence entre `/chat/completions` et `/conversations/:id/messages:complete`
-- Résoudre l'incohérence du mode streaming dans `conversation-completion` (historique non inclus)</content>
+[x] Résoudre l'incohérence du mode streaming dans `conversation-completion` (historique non inclus)</content>
 <parameter name="filePath">D:\developpement\ai-services\chat_service\IMPROVEMENTS.md

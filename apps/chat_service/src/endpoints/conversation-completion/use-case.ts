@@ -72,7 +72,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
 
       const client = new LangchainLLMClient();
       const result = await client.inferStream(
-        command.messages,
+        messages,
         process.env.LLM_PROVIDER,
         process.env.LLM_MODEL,
         process.env.LLM_KEY  ? { apiKey: process.env.LLM_KEY } : {}
