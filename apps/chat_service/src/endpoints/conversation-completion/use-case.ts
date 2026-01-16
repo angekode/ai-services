@@ -60,7 +60,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
 
       // Enregistrement des messages d'entrée dans l'historique
       for (const inputMessage of command.messages) {
-        dbClient.messageModel?.addEntry({
+        await dbClient.messageModel?.addEntry({
           role: inputMessage.role,
           content: inputMessage.content,
           conversation_id: Number(command.conversationId)
@@ -68,7 +68,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
       }
       
       // Enregistrement du message de réponse dans l'historique
-      dbClient.messageModel?.addEntry({
+      await dbClient.messageModel?.addEntry({
         role: 'assistant',
         content: result.content,
         conversation_id: Number(command.conversationId)
@@ -95,9 +95,34 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
         process.env.LLM_KEY  ? { apiKey: process.env.LLM_KEY } : {}
       );
 
+      const streamWrapper = async function * (result : AsyncGenerator<InferStreamResult>)  {
+        let concatenatedResponse = '';
+        
+        try {
+          for await (const chunk of result) {
+            if (chunk.type === 'message.delta') {
+              concatenatedResponse += chunk.content;
+            }
+            yield chunk;
+          }
+        
+        // Coupure de la connextion par le serveur llm
+        } catch (error) {
+          console.error(String(error));
+
+        // Enregistrement de la réponse même si elle est interrompue
+        } finally {
+          dbClient.messageModel?.addEntry({
+            role: 'assistant',
+            content: concatenatedResponse,
+            conversation_id: Number(command.conversationId)
+          });
+        }
+      }
+
       // Enregistrement des messages d'entrée dans l'historique
       for (const inputMessage of command.messages) {
-        dbClient.messageModel?.addEntry({
+        await dbClient.messageModel?.addEntry({
           role: inputMessage.role,
           content: inputMessage.content,
           conversation_id: Number(command.conversationId)
@@ -106,7 +131,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
 
       return {
         kind: 'stream',
-        stream: result
+        stream: streamWrapper(result)
       };
 
     }

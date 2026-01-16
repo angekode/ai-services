@@ -70,8 +70,14 @@ async function encodeStream(res: Response, result: StreamResult<ConversationComp
   res.setHeader('Content-Type', 'text/event-stream');
   res.flushHeaders(); // envoie les headers immédiatement et pas seulement au moment du 1er write (important pour 'text/event-stream')
 
+  let abordRequested = false;
+  res.on('close', () => abordRequested = true );
+
   try {
     for await (const chunk of result.stream) {
+      if (abordRequested) {
+        break;
+      }
       if (chunk.type === 'message.delta') {
         const bodyContent : ConversationCompletionOutputRequestStreamType = {
           choices: [{
