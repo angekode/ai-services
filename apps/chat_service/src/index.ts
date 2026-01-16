@@ -39,7 +39,9 @@ try {
 
 
 // Base de données
-initDatabase();
+if (process.env.NODE_ENV !== 'test') {
+  initDatabase();
+}
 
 
 // Serveur
@@ -64,4 +66,8 @@ server.use(errorHandler);
 
 
 // Serveur - Lancement
-server.listen(process.env.PORT, () => console.log(`Serveur lancé sur le port ${process.env.PORT}`));
+if (process.env.NODE_ENV !== 'test') {
+  server.listen(process.env.PORT, () => console.log(`Serveur lancé sur le port ${process.env.PORT}`));
+}
+
+export { server }; // Pour les tests unitaires
