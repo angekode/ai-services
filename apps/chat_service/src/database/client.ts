@@ -9,4 +9,8 @@ export async function initDatabase() {
   await client.seedTables();
 }
 
+export async function closeDatabase() {
+  await client.close();
+}
+
 export default client;

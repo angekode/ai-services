@@ -40,7 +40,7 @@ try {
 
 // Base de données
 if (process.env.NODE_ENV !== 'test') {
-  initDatabase();
+  await initDatabase();
 }
 
 

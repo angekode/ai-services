@@ -54,4 +54,8 @@ export class SequelizeDatabase implements DatabaseInterface {
     //await this.messageModel?.model?.create({ role: 'user', content: 'Contenu du message', conversation_id: 1 });
     //await this.messageModel?.model?.create({ role: 'assistant', content: 'Réponse du message', conversation_id: 1 });
   }
+
+  async close() {
+    await this.#client?.close();
+  }
 };
