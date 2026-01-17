@@ -71,7 +71,7 @@ export default {
         throw new BadInputError('Utilisateur non trouvé');
       }
       res.status(StatusCodes.OK);
-      res.json({ countRemoved: count });
+      res.json({ removedCount: count });
       return;
       
     } catch (error) {

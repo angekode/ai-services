@@ -19,14 +19,14 @@ mainRouter.get('/', (_req, res) => res.send('Serveur à l\'écoute'));
 mainRouter.post('/chat/completions', completionController);
 
 // /users
-mainRouter.get('/users/:username', userValidator.validateUsernameParam, userController.getUserInformationFromUserName);
 mainRouter.post('/users', userValidator.validateCreateUserBody, userController.createUser);
+mainRouter.get('/users/:username', userValidator.validateUsernameParam, userController.getUserInformationFromUserName);
 mainRouter.delete('/users/:username', userValidator.validateUsernameParam, userController.removeUser);
 mainRouter.get('/users/:userId/conversations', getConversationsFromUserId);
 
 // /conversations
-mainRouter.get('/conversations/:conversationId/messages', getMessagesFromConversationId);
 mainRouter.post('/conversations', createConversation);
+mainRouter.get('/conversations/:conversationId/messages', getMessagesFromConversationId);
 mainRouter.post('/conversations/:conversationId/messages:complete', conversationCompletionController);
 
 export default mainRouter;
