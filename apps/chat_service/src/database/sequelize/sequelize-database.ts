@@ -46,15 +46,6 @@ export class SequelizeDatabase implements DatabaseInterface {
     await this.#client.sync({ force: true });
   }
 
-  async seedTables(): Promise<void> {
-    await this.userModel?.model?.create({ username: 'Nico', password: 'rocket' });
-    await this.userModel?.model?.create({ username: 'Chris', password: 'pass' });
-    await this.conversationModel?.model?.create({ title: 'Les chats', user_id: 1 });
-    await this.conversationModel?.model?.create({ title: 'Les Avengers', user_id: 2 });
-    //await this.messageModel?.model?.create({ role: 'user', content: 'Contenu du message', conversation_id: 1 });
-    //await this.messageModel?.model?.create({ role: 'assistant', content: 'Réponse du message', conversation_id: 1 });
-  }
-
   async close() {
     await this.#client?.close();
   }

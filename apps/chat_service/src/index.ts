@@ -40,9 +40,8 @@ try {
 
 // Base de données
 if (process.env.NODE_ENV !== 'test') {
-  await initDatabase();
+await initDatabase();
 }
-
 
 // Serveur
 const server = express();

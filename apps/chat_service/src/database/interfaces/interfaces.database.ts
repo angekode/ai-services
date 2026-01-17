@@ -1,7 +1,6 @@
 export interface DatabaseInterface {
   connect() : Promise<void>;
   createTables() : Promise<void>;
-  seedTables() : Promise<void>;
   createModels() : Promise<void>;
 };
 
