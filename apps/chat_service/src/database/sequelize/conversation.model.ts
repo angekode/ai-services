@@ -13,6 +13,10 @@ type AddConversationEntry = {
   user_id: number
 };
 
+type RemoveConversationEntry = {
+  id: number
+};
+
 class ConversationEntryMapper implements EntryMapper<ConversationEntry, AddConversationEntry> {
   create(row: object) : ConversationEntry {
 
@@ -29,7 +33,7 @@ type Query = Record<string, unknown>;
 type UserId = number;
 
 
-export class ConversationModel extends SequelizeBaseModel<ConversationEntry, number, AddConversationEntry>  {
+export class ConversationModel extends SequelizeBaseModel<ConversationEntry, number, AddConversationEntry, RemoveConversationEntry>  {
 
   constructor(client: Sequelize) {
     super(client, new ConversationEntryMapper());

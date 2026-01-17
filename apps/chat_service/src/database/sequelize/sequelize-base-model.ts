@@ -9,7 +9,7 @@ export interface EntryMapper<TEntry, TAddEntry>  {
 };
 
 
-export class SequelizeBaseModel<TEntry, TId, TAddEntry> implements ModelInterface<TEntry, SequelizeQuery, TId, TAddEntry> {
+export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry> implements ModelInterface<TEntry, SequelizeQuery, TId, TAddEntry, TRemoveEntry> {
 
   protected client : Sequelize;
   model: ModelStatic<Model> | undefined;
@@ -44,5 +44,19 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry> implements ModelInterfac
   async addEntry(entry: TAddEntry) : Promise<TEntry | null> {
     const newEntry = await this.model?.create(entry as any);
     return newEntry ? this.#mapper.create(newEntry) : null;
+  }
+
+  async removeEntry(entry: TRemoveEntry) : Promise<number> {
+
+    const rows = await this.model?.findAll({ where : entry as any });
+    if (!rows) {
+      return 0;
+    }
+    let count = 0;
+    for (const row of rows) {
+      await row.destroy();
+      count++;
+    }
+    return count;
   }
 };
