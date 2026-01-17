@@ -3,8 +3,7 @@ import type { InferStreamResult } from 'rag_library/dist/llm-client-interface.js
 
 import { ServerError, type UseCase, type UseCaseResult, ProviderError } from "service_library";
 import { type ConversationCompletionCommand } from "./command.js";
-import type { Infer } from 'zod';
-import dbClient  from '../../database/client.js';
+import database  from '../../database/client.js';
 
 export type ConversationCompletionUseCaseResultSingleValue = {
   content: string;
@@ -27,7 +26,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
       throw new ServerError('Variables d\' environnement llm non définies');
     }
 
-    const conversations = await dbClient.messageModel?.getEntries({ conversation_id: Number(command.conversationId) });
+    const conversations = await database.client.messageModel?.getEntries({ conversation_id: Number(command.conversationId) });
     if (!conversations) {
       throw new ServerError(`Conversation non trouvée: ${command.conversationId}`);
     }
@@ -60,7 +59,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
 
       // Enregistrement des messages d'entrée dans l'historique
       for (const inputMessage of command.messages) {
-        await dbClient.messageModel?.addEntry({
+        await database.client.messageModel?.addEntry({
           role: inputMessage.role,
           content: inputMessage.content,
           conversation_id: Number(command.conversationId)
@@ -68,7 +67,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
       }
       
       // Enregistrement du message de réponse dans l'historique
-      await dbClient.messageModel?.addEntry({
+      await database.client.messageModel?.addEntry({
         role: 'assistant',
         content: result.content,
         conversation_id: Number(command.conversationId)
@@ -112,7 +111,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
 
         // Enregistrement de la réponse même si elle est interrompue
         } finally {
-          dbClient.messageModel?.addEntry({
+          database.client.messageModel?.addEntry({
             role: 'assistant',
             content: concatenatedResponse,
             conversation_id: Number(command.conversationId)
@@ -122,7 +121,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
 
       // Enregistrement des messages d'entrée dans l'historique
       for (const inputMessage of command.messages) {
-        await dbClient.messageModel?.addEntry({
+        await database.client.messageModel?.addEntry({
           role: inputMessage.role,
           content: inputMessage.content,
           conversation_id: Number(command.conversationId)

@@ -1,72 +1,30 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import zod, { ZodError } from 'zod';
-
-import { initDatabase } from './database/client.js';
-import { completionController } from './endpoints/chat-completion/controllers/completion.controller.js';
-import { getUserFromUserNameController } from './endpoints/users/contollers.js';
-import { errorHandler } from './error.handler.js';
-
-import { 
-  getConversationsFromUserId, 
-  getMessagesFromConversationId, 
-  createConversation 
-} from './endpoints/conversations/contollers.js';
-
-import { conversationCompletionController } from './endpoints/conversation-completion/controller.js';
+import environment from './environment.js';
+import database from './database/client.js';
+import server from './server.js';
 
 
-// Configuration
-const envScheme = zod.object({
-  PORT : zod.string(),
-  PG_DATABASE_URL : zod.url(),
-  LLM_PROVIDER : zod.string(),
-  LLM_MODEL : zod.string(),
-  LLM_KEY : zod.string(),
-});
-
-dotenv.config();
-
+// Environnement
 try {
-  envScheme.parse(process.env);
+  environment.init();
+  console.log('Environnement chargé avec succés');
 } catch (error: unknown) {
-  if (error instanceof ZodError) {
-    console.error('Fichier de variables d\'environnement invalide:');
-    console.error(error.issues.map(issue => `${issue.path} : ${issue.message}`));
-    process.exit();
-  }
+  console.error(error instanceof Error ? console.error(error.message) : String(error));
+  process.exit(0);
 }
 
 
 // Base de données
 if (process.env.NODE_ENV !== 'test') {
-await initDatabase();
+  await database.init();
+  console.log('Base de données initialisée avec succés');
 }
 
+
 // Serveur
-const server = express();
-server.use(express.json());
-
-
-// Serveur - Routes
-server.use((req, _res, next) => { console.log('Requête reçue: ' + req.url); next(); });
-server.get('/', (_req, res) => res.send('Serveur à l\'écoute'));
-server.post('/chat/completions', completionController);
-server.get('/users/:username', getUserFromUserNameController);
-server.get('/users/:userId/conversations', getConversationsFromUserId);
-server.get('/conversations/:conversationId/messages', getMessagesFromConversationId);
-
-server.post('/conversations', createConversation);
-server.post('/conversations/:conversationId/messages:complete', conversationCompletionController);
-
-
-// Gestion de toutes les expceptions envoyées depuis les controlleurs (synchrones et asynchrones)
-server.use(errorHandler);
-
-
-// Serveur - Lancement
+server.init();
 if (process.env.NODE_ENV !== 'test') {
-  server.listen(process.env.PORT, () => console.log(`Serveur lancé sur le port ${process.env.PORT}`));
+  server.run();
+  console.log('Serveur lancé avec succés');
 }
 
 export { server }; // Pour les tests unitaires

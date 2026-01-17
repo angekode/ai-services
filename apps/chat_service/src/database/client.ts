@@ -1,14 +1,17 @@
 import { SequelizeDatabase } from "./sequelize/sequelize-database.js";
 
-const client = new SequelizeDatabase();
 
-export async function initDatabase() {
-  await client.connect();
-  await client.createModels();
-}
+export default {
 
-export async function closeDatabase() {
-  await client.close();
-}
+  client: new SequelizeDatabase(),
 
-export default client;
+  async init() {
+    await this.client.connect();
+    await this.client.createModels();
+  },
+
+  async close() {
+  await this.client.close();
+  }
+};
+

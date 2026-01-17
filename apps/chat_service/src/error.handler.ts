@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { type Request, type Response, type NextFunction } from 'express';
 import { ZodError } from 'zod';
 
+
 export function errorHandler(error: unknown, req: Request, res: Response, next: NextFunction): void {
   if (error instanceof Error) {
 

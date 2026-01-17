@@ -1,6 +1,6 @@
 import { type Request, type Response } from 'express';
 import { UserModel } from '../../database/sequelize/user.model.js';
-import dbClient from '../../database/client.js';
+import database from '../../database/client.js';
 
 
 export async function getUserFromUserNameController(req: Request, res: Response): Promise<void> {
@@ -16,7 +16,7 @@ export async function getUserFromUserNameController(req: Request, res: Response)
   }
 
   try {
-    const user = await dbClient.userModel?.getFirstEntry({ username: req.params.username });
+    const user = await database.client.userModel?.getFirstEntry({ username: req.params.username });
     if (!user) {
       res.status(500);
       res.send({error: 'Erreur interne'}); // pour ne pas faire fuiter les utilisateurs existants

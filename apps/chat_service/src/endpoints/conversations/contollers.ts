@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express';
-import dbClient from '../../database/client.js';
+import database from '../../database/client.js';
 import zod, { ZodError } from 'zod';
 import { StatusCodes } from 'http-status-codes';
 import { BadInputError } from 'service_library';
@@ -15,7 +15,7 @@ export async function createConversation(req: Request, res: Response) : Promise<
   //try {
     
   const bodyJson = createConversationScheme.parse(req.body);
-  const newConversation = dbClient.conversationModel?.addEntry(bodyJson);
+  const newConversation = database.client.conversationModel?.addEntry(bodyJson);
 
   if (!newConversation) {
     res.status(500);
@@ -57,7 +57,7 @@ export async function getConversationsFromUserId(req: Request, res: Response): P
 
   //try {
  
-    const conversations = await dbClient.conversationModel?.getEntries({ user_id: Number(req.params.userId) });
+    const conversations = await database.client.conversationModel?.getEntries({ user_id: Number(req.params.userId) });
     if (!conversations) {
       res.status(500);
       res.send({error: 'Erreur interne'}); // pour ne pas faire fuiter les utilisateurs existants
@@ -91,7 +91,7 @@ export async function getMessagesFromConversationId(req: Request, res: Response)
 
   //try {
  
-    const conversations = await dbClient.messageModel?.getEntries({ conversation_id: Number(req.params.conversationId) });
+    const conversations = await database.client.messageModel?.getEntries({ conversation_id: Number(req.params.conversationId) });
     if (!conversations) {
       res.status(500);
       res.send({error: 'Erreur interne'}); // pour ne pas faire fuiter les utilisateurs existants
