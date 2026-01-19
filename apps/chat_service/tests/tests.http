@@ -1,0 +1,41 @@
+### List des messages
+GET http://localhost:3001/conversations/2/messages
+
+
+### Information sur un user
+GET http://localhost:3001/users/bobby
+
+
+### Liste des conversations
+GET http://localhost:3001/users/3/conversations
+
+
+### Poser une question en mode single
+POST http://localhost:3001/conversations/2/messages:complete
+Content-Type: application/json
+
+{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Et pour l'herbe ?"
+    }
+  ],
+  "stream": false
+}
+
+
+
+### Poser une question en mode stream
+POST http://localhost:3001/conversations/2/messages:complete
+Content-Type: application/json
+
+{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Et pour l'herbe ?"
+    }
+  ],
+  "stream": true
+}
