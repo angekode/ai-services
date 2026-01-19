@@ -6,8 +6,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "node ./dist/index.js",
-    "db:create": "node ./dist/database/migrations/01.create-tables.js",
-    "db:seed": "node ./dist/database/migrations/02.seed-tables.js",
+    "db:create": "node --env-file=.env ./dist/database/migrations/01.create-tables.js",
+    "db:seed": "node --env-file=.env ./dist/database/migrations/02.seed-tables.js",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.mjs"
   },
   "type": "module",

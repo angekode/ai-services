@@ -29,6 +29,34 @@ describe('/users', () => {
   });
 });
 
+describe('/conversations', () => {
+
+  let userId : number | undefined;
+  let resUser : any;
+  let conversationId : any;
+
+  it('prep', async () => {
+    resUser = await request(server.app).post('/users').send({ username: 'bobby', password: 'bobby' }).set('Content-Type', 'application/json');
+    userId = resUser.body.id;
+  });
+
+  it('POST /conversations', async () => {   
+    const res1 = await request(server.app).post('/conversations').send({ user_id: resUser.body.id, title: 'conversation de bobby' }).set('Content-Type', 'application/json');
+    conversationId = res1.body.id;
+
+    expect(res1.status).toBe(StatusCodes.CREATED);
+    expect(res1.body.id).toBeDefined();
+    expect(res1.body.title).toBe('conversation de bobby');
+    expect(res1.body.user_id).toBe(userId);
+  });
+
+  it('DELETE /conversations/', async () => {   
+    const res1 = await request(server.app).delete(`/conversations/${conversationId}`);
+    expect(res1.status).toBe(StatusCodes.OK);
+  });
+});
+
+
 // Pour éviter le warning: "Jest did not exit one second after the test run has completed."
 // Il faut arrêter toutes les fonctions asynchrones
 afterAll(async () => await database.close());
