@@ -1,0 +1,4 @@
+url = "http://localhost:3001/conversations/1/messages:complete"
+request = POST
+header = "Content-Type: application/json"
+data = @./tests/completion.body.json

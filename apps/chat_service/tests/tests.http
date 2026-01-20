@@ -1,5 +1,5 @@
 ### List des messages
-GET http://localhost:3001/conversations/2/messages
+GET http://localhost:3001/conversations/1/messages
 
 
 ### Information sur un user
@@ -7,7 +7,7 @@ GET http://localhost:3001/users/bobby
 
 
 ### Liste des conversations
-GET http://localhost:3001/users/3/conversations
+GET http://localhost:3001/users/1/conversations
 
 
 ### Poser une question en mode single
