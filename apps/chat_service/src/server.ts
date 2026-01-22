@@ -1,6 +1,7 @@
 import express from 'express';
 import mainRouter from './routes/main.router.js';
 import { errorHandler } from './error.handler.js';
+import cors from 'cors';
 
 
 export default {
@@ -8,7 +9,10 @@ export default {
   app: express(),
 
   init() {
+    
+    this.app.use(cors());
     this.app.use(express.json());
+
     // Log
     this.app.use((req, _res, next) => { console.log('Requête reçue: ' + req.url); next(); });
     // Routes

@@ -5,7 +5,8 @@ import { DataTypes, type ModelStatic, Model, Sequelize } from "sequelize";
 type ConversationEntry = {
   id: number,
   title: string,
-  user_id: number
+  user_id: number,
+  created_at: string
 };
 
 type AddConversationEntry = {
@@ -23,7 +24,8 @@ class ConversationEntryMapper implements EntryMapper<ConversationEntry, AddConve
     return {
       id: ('id' in row && typeof row.id === 'number') ? row.id : 0,
       title: ('title' in row && typeof row.title === 'string') ? row.title : '',
-      user_id: ('user_id' in row && typeof row.user_id === 'number') ? row.user_id : -1
+      user_id: ('user_id' in row && typeof row.user_id === 'number') ? row.user_id : -1,
+      created_at: ('created_at' in row && typeof row.created_at === 'string') ? row.created_at : '',
     };
   }
 }

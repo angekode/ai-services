@@ -6,7 +6,8 @@ type MessageEntry = {
   id: number,
   role: string,
   content: string,
-  conversation_id: number
+  conversation_id: number,
+  created_at: string
 };
 
 type AddMessageEntry = {
@@ -27,6 +28,7 @@ class MessageEntryMapper implements EntryMapper<MessageEntry, AddMessageEntry> {
       role: ('role' in row && typeof row.role === 'string') ? row.role : '',
       content: ('content' in row && typeof row.content === 'string') ? row.content : '',
       conversation_id: ('conversation_id' in row && typeof row.conversation_id === 'number') ? row.conversation_id : -1,
+      created_at: ('created_at' in row && row.created_at instanceof Date) ? row.created_at.toISOString() : '',
     };
   }
 }
