@@ -67,7 +67,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
       }
       
       // Enregistrement du message de réponse dans l'historique
-      await database.client.messageModel?.addEntry({
+      const messageEntry = await database.client.messageModel?.addEntry({
         role: 'assistant',
         content: result.content,
         conversation_id: Number(command.conversationId)
@@ -79,7 +79,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
         value: {
           content: result.content,
           metadata: result.metadata,
-          id: result.id,
+          id: messageEntry?.id.toString() /*result.id*/, // on remplace l'id de completion généré par le LLM par l'id du message dans la base de donnée
           model: process.env.LLM_MODEL
         }
       };

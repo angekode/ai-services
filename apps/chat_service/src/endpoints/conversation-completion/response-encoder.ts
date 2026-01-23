@@ -41,6 +41,7 @@ type SingleResult<TOut, TChunk> = Extract<
 function encodeSingle(res: Response, result: SingleResult<ConversationCompletionUseCaseResultSingleValue, ConversationCompletionUseCaseResultStreamValue>, context: Context) {
 
   const bodyContent : ConversationCompletionOutputRequestType = {
+    id: result.value.id ?? '',
     choices: [
       {
         index: 0,

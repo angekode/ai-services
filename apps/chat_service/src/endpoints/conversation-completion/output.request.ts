@@ -1,4 +1,5 @@
 export type ConversationCompletionOutputRequestType = {
+  id: string, // id du message à utiliser dans toutes les routes (on remplace l'usage de OpenAI qui correspond normalement à l'id de completion) 
   choices: [
     {
       finish_reason: 'stop',
