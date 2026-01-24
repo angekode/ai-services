@@ -19,6 +19,20 @@ type Message = {
   content : string;
 };
 
+
+/**
+ * ConversationCompletionUseCase(command)
+ * 
+ * command : ConversationCompletionCommand {
+ *   messages: Message[],
+ *   conversationId: string,
+ *   stream: boolean
+ * }
+ * 
+ * @param command Contient la liste des messages envoyés par le client, l'id de la conversation, et le mode stream.
+ * @return En mode non stream: Un objet contenant le message de réponse avec l'id du message utile pour les autres requêtes
+ *         En mode stram: Un objet contenant le stream qui enverra le message par morceaux
+ */
 export class ConversationCompletionUseCase implements UseCase<ConversationCompletionCommand, ConversationCompletionUseCaseResultSingleValue, ConversationCompletionUseCaseResultStreamValue> {
   async execute(command: ConversationCompletionCommand): Promise<UseCaseResult<ConversationCompletionUseCaseResultSingleValue, ConversationCompletionUseCaseResultStreamValue>> {
 
@@ -26,10 +40,13 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
       throw new ServerError('Variables d\' environnement llm non définies');
     }
 
+
+    // Récupération de l'historique de la conversation dans la base de donnée
     const conversations = await database.client.messageModel?.getEntries({ conversation_id: Number(command.conversationId) });
     if (!conversations) {
       throw new ServerError(`Conversation non trouvée: ${command.conversationId}`);
     }
+
     let messages : Message[] = conversations.map(m => { 
       if (!['user', 'system', 'assistant'].includes(m.role)) {
         throw new ServerError('Role de message invalide');
@@ -41,10 +58,14 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
     });
 
 
+    // Ajout des messages de requête envoyés par le client
     messages = [...messages, ...command.messages];
 
+
+    // Demande de réponse du LLM en mode non stream
     if (command.stream === false) {
 
+      // Requête au LLM
       const client = new LangchainLLMClient();
       const result = await client.infer(
         messages,
@@ -57,7 +78,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
         throw new ProviderError(result.message);
       }
 
-      // Enregistrement des messages d'entrée dans l'historique
+      // Réponse bien reçue: Enregistrement des messages de requête du client dans l'historique
       for (const inputMessage of command.messages) {
         await database.client.messageModel?.addEntry({
           role: inputMessage.role,
@@ -66,7 +87,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
         });
       }
       
-      // Enregistrement du message de réponse dans l'historique
+      // Enregistrement du message de réponse du LLM dans l'historique
       const messageEntry = await database.client.messageModel?.addEntry({
         role: 'assistant',
         content: result.content,
@@ -84,6 +105,8 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
         }
       };
 
+
+    // Demande de réponse au LLM en mode stream
     } else {
 
       const client = new LangchainLLMClient();
@@ -100,6 +123,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
         try {
           for await (const chunk of result) {
             if (chunk.type === 'message.delta') {
+              chunk.id = 
               concatenatedResponse += chunk.content;
             }
             yield chunk;
