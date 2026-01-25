@@ -27,24 +27,21 @@ Content-Type: application/json
 
 
 ### Poser une question en mode stream
-POST http://localhost:3001/conversations/2/messages:complete
+POST http://localhost:3001/conversations/1/messages:complete
 Content-Type: application/json
 
 {
-  "messages": [
-    {
-      "role": "user",
-      "content": "Et pour l'herbe ?"
-    }
-  ],
-  "stream": true
+  "stream": false
 }
 
-### 
+### Créer un message dans une conversation
 POST http://localhost:3001/conversations/1/messages
 Content-Type: application/json
 
 {
   "role": "user",
-  "content": "test"
+  "content": "Et pour l'espagne ?"
 }
+
+### Supprimer un message dans une conversation
+DELETE http://localhost:3001/messages/48

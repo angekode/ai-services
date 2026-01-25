@@ -4,7 +4,6 @@ export type Message = {
 };
 
 export type ConversationCompletionCommand = {
-  messages: Message[],
   conversationId: string,
   stream: boolean
 };

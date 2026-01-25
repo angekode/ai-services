@@ -26,7 +26,9 @@ mainRouter.post('/conversations', conversationController.createConversation);
 mainRouter.get('/conversations/:conversationId/messages', conversationController.getMessagesFromConversationId);
 mainRouter.post('/conversations/:conversationId/messages:complete', conversationCompletionController);
 mainRouter.delete('/conversations/:conversationId', conversationController.removeConversation);
-mainRouter.post('/conversations/:conversationId/messages', conversationController.createMessageForConversation, messageController.createMessage);
 
+// Messages
+mainRouter.post('/conversations/:conversationId/messages', conversationController.createMessageForConversation, messageController.createMessage);
+mainRouter.delete('/messages/:messageId', messageController.removeMessage);
 
 export default mainRouter;

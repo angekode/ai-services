@@ -56,7 +56,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
       throw new ServerError(`Conversation non trouvée: ${command.conversationId}`);
     }
 
-    let messages : Message[] = conversations.map(m => { 
+    let messageHistory : Message[] = conversations.map(m => { 
       if (!['user', 'system', 'assistant'].includes(m.role)) {
         throw new ServerError('Role de message invalide');
       }
@@ -67,39 +67,26 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
     });
 
 
-    // Ajout des messages de requête envoyés par le client
-    messages = [...messages, ...command.messages];
-
-
     // Demande de réponse du LLM en mode non stream
     if (command.stream === false) {
 
       // Requête au LLM
       const client = new LangchainLLMClient();
-      const result = await client.infer(
-        messages,
+      const llmResult = await client.infer(
+        messageHistory,
         process.env.LLM_PROVIDER,
         process.env.LLM_MODEL,
         process.env.LLM_KEY  ? { apiKey: process.env.LLM_KEY } : {}
       );
 
-      if (result.type === 'error') {
-        throw new ProviderError(result.message);
-      }
-
-      // Réponse bien reçue: Enregistrement des messages de requête du client dans l'historique
-      for (const inputMessage of command.messages) {
-        await database.client.messageModel?.addEntry({
-          role: inputMessage.role,
-          content: inputMessage.content,
-          conversation_id: Number(command.conversationId)
-        });
+      if (llmResult.type === 'error') {
+        throw new ProviderError(llmResult.message);
       }
       
       // Enregistrement du message de réponse du LLM dans l'historique
-      const messageEntry = await database.client.messageModel?.addEntry({
+      const llmResponseSavedEntry = await database.client.messageModel?.addEntry({
         role: 'assistant',
-        content: result.content,
+        content: llmResult.content,
         conversation_id: Number(command.conversationId)
       });
 
@@ -107,9 +94,9 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
       return {
         kind: 'single',
         value: {
-          content: result.content,
-          metadata: result.metadata,
-          id: messageEntry?.id.toString() /*result.id*/, // on remplace l'id de completion généré par le LLM par l'id du message dans la base de donnée
+          content: llmResult.content,
+          metadata: llmResult.metadata,
+          id: llmResponseSavedEntry?.id.toString() /*result.id*/, // on remplace l'id de completion généré par le LLM par l'id du message dans la base de donnée
           model: process.env.LLM_MODEL
         }
       };
@@ -120,7 +107,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
 
       const client = new LangchainLLMClient();
       const result = await client.inferStream(
-        messages,
+        messageHistory,
         process.env.LLM_PROVIDER,
         process.env.LLM_MODEL,
         process.env.LLM_KEY  ? { apiKey: process.env.LLM_KEY } : {}
@@ -150,15 +137,6 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
             conversation_id: Number(command.conversationId)
           });
         }
-      }
-
-      // Enregistrement des messages d'entrée dans l'historique
-      for (const inputMessage of command.messages) {
-        await database.client.messageModel?.addEntry({
-          role: inputMessage.role,
-          content: inputMessage.content,
-          conversation_id: Number(command.conversationId)
-        });
       }
 
       return {

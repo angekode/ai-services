@@ -6,6 +6,5 @@ export const messageScheme = zod.object({
 });
 
 export const conversationCompletionScheme = zod.object({
-  messages: zod.array(messageScheme),
   stream: zod.boolean()
 });
