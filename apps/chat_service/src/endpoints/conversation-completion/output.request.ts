@@ -22,6 +22,7 @@ type ConversationCompletionOutputRequestDeltaType = {
 
 
 export type ConversationCompletionOutputRequestStreamType = {
+  id: number,
   choices: {
     index: number,
     delta: ConversationCompletionOutputRequestDeltaType,

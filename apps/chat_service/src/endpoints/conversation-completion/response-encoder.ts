@@ -66,6 +66,7 @@ type StreamResult<TOut, TChunk> = Extract<
   { kind: 'stream' }
 >;
 
+
 async function encodeStream(res: Response, result: StreamResult<ConversationCompletionUseCaseResultSingleValue, ConversationCompletionUseCaseResultStreamValue>, context: Context) {
   encodeHeaders(res, context); // headers de tracking
   res.setHeader('Content-Type', 'text/event-stream');
@@ -81,6 +82,7 @@ async function encodeStream(res: Response, result: StreamResult<ConversationComp
       }
       if (chunk.type === 'message.delta') {
         const bodyContent : ConversationCompletionOutputRequestStreamType = {
+          id: Number(chunk.id),
           choices: [{
             index: 0,
             delta: { role: 'assistant', content: chunk.content },

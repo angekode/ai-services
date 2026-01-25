@@ -15,12 +15,6 @@ POST http://localhost:3001/conversations/2/messages:complete
 Content-Type: application/json
 
 {
-  "messages": [
-    {
-      "role": "user",
-      "content": "Et pour l'herbe ?"
-    }
-  ],
   "stream": false
 }
 
@@ -31,7 +25,7 @@ POST http://localhost:3001/conversations/1/messages:complete
 Content-Type: application/json
 
 {
-  "stream": false
+  "stream": true
 }
 
 ### Créer un message dans une conversation
@@ -40,7 +34,7 @@ Content-Type: application/json
 
 {
   "role": "user",
-  "content": "Et pour l'espagne ?"
+  "content": "Et pour le Maroc ?"
 }
 
 ### Supprimer un message dans une conversation

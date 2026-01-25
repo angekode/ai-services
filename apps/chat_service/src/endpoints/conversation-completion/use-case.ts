@@ -1,6 +1,5 @@
 import { LangchainLLMClient } from 'rag_library';
 import type { InferStreamResult } from 'rag_library/dist/llm-client-interface.js';
-
 import { ServerError, type UseCase, type UseCaseResult, ProviderError } from "service_library";
 import { type ConversationCompletionCommand } from "./command.js";
 import database  from '../../database/client.js';
@@ -105,33 +104,45 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
     // Demande de réponse au LLM en mode stream
     } else {
 
+      // Récupération du stream de réponse
       const client = new LangchainLLMClient();
-      const result = await client.inferStream(
+      const llmStream = await client.inferStream(
         messageHistory,
         process.env.LLM_PROVIDER,
         process.env.LLM_MODEL,
         process.env.LLM_KEY  ? { apiKey: process.env.LLM_KEY } : {}
       );
 
+      // Création d'un message vide dans la base de donnée pour récupérer l'id
+      const llmResponseSavedEntry = await database.client.messageModel?.addEntry({
+        role: 'assistant',
+        content: '',
+        conversation_id: Number(command.conversationId)
+      });
+      if (!llmResponseSavedEntry) {
+        throw new ServerError('Echec de création de message dans la base de donnée');
+      }
+
+      // Wrapper de stream pour concatener la réponse et l'enregistrer dans la base à la fin de la réponse
       const streamWrapper = async function * (result : AsyncGenerator<InferStreamResult>)  {
         let concatenatedResponse = '';
         
         try {
           for await (const chunk of result) {
             if (chunk.type === 'message.delta') {
-              chunk.id = 
+              chunk.id = llmResponseSavedEntry.id.toString();
               concatenatedResponse += chunk.content;
             }
             yield chunk;
           }
         
-        // Coupure de la connextion par le serveur llm
+        // Coupure de la connexion par le serveur llm
         } catch (error) {
           console.error(String(error));
 
         // Enregistrement de la réponse même si elle est interrompue
         } finally {
-          database.client.messageModel?.addEntry({
+          const llmResponseSavedEntry = await database.client.messageModel?.addEntry({
             role: 'assistant',
             content: concatenatedResponse,
             conversation_id: Number(command.conversationId)
@@ -141,7 +152,7 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
 
       return {
         kind: 'stream',
-        stream: streamWrapper(result)
+        stream: streamWrapper(llmStream)
       };
 
     }
