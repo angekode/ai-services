@@ -39,3 +39,12 @@ Content-Type: application/json
   ],
   "stream": true
 }
+
+### 
+POST http://localhost:3001/conversations/1/messages
+Content-Type: application/json
+
+{
+  "role": "user",
+  "content": "test"
+}

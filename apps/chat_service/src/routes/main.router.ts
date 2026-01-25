@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { completionController } from '../endpoints/chat-completion/controllers/completion.controller.js';
-
+import messageController from '../endpoints/messages/message.controller.js';
 import userController from '../endpoints/users/contollers.js';
 import userValidator from '../endpoints/users/validators.js';
 
@@ -26,5 +26,7 @@ mainRouter.post('/conversations', conversationController.createConversation);
 mainRouter.get('/conversations/:conversationId/messages', conversationController.getMessagesFromConversationId);
 mainRouter.post('/conversations/:conversationId/messages:complete', conversationCompletionController);
 mainRouter.delete('/conversations/:conversationId', conversationController.removeConversation);
+mainRouter.post('/conversations/:conversationId/messages', conversationController.createMessageForConversation, messageController.createMessage);
+
 
 export default mainRouter;

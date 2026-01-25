@@ -29,6 +29,15 @@ type Message = {
  *   stream: boolean
  * }
  * 
+ * A partir d'un ou plusieurs messages de requête du client,
+ * et de l'historique des messages de la conversation,
+ * renvoie une réponse du LLM.
+ * 
+ * Les messages de requête du client sont enregistrés dans la base de donnée,
+ * si la réponse du LLM est bien reçue.
+ * 
+ * 
+ * 
  * @param command Contient la liste des messages envoyés par le client, l'id de la conversation, et le mode stream.
  * @return En mode non stream: Un objet contenant le message de réponse avec l'id du message utile pour les autres requêtes
  *         En mode stram: Un objet contenant le stream qui enverra le message par morceaux

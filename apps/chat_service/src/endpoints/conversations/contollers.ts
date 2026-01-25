@@ -88,5 +88,12 @@ export default {
     } catch (error) {
       next(error);
     }
+  },
+
+  async createMessageForConversation(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const requestJson = req.body;
+    const requestWithConversationId = { ...requestJson, conversationId: req.params.conversationId };
+    req.body = requestWithConversationId;
+    next();
   }
 };
