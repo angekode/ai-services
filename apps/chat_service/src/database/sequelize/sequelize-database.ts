@@ -46,6 +46,12 @@ export class SequelizeDatabase implements DatabaseInterface {
     await this.#client.sync({ force: true });
   }
 
+  async clearTablesContent() {
+    await this.messageModel?.removeAllEntries();
+    await this.conversationModel?.removeAllEntries();
+    await this.userModel?.removeAllEntries();
+  }
+
   async close() {
     await this.#client?.close();
   }

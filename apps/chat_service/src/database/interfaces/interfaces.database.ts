@@ -12,6 +12,7 @@ export interface ModelInterface<TEntry, TQuery, TId, TAddEntry, TRemoveEntry> {
   getEntryWithId(id: TId): Promise<TEntry>;
   addEntry(entry: TAddEntry): Promise<TEntry | null>;
   removeEntry(entry: TRemoveEntry): Promise<number>;
+  removeAllEntries(): Promise<number>;
 };
 
 

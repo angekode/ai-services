@@ -59,4 +59,8 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry> implements
     }
     return count;
   }
+
+  async removeAllEntries(): Promise<number> {
+    return this.model?.destroy({ where: {} }) ?? 0;
+  }
 };

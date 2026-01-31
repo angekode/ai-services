@@ -1,17 +1,41 @@
+### Créer un utilisateur
+POST http://localhost:3001/users
+Content-Type: application/json
+
+{
+  "username": "Bob",
+  "password": "password"
+}
+
+
+### Information sur un user
+GET http://localhost:3001/users/Bob
+
+
+### Supprimer un User
+DELETE http://localhost:3001/users/Bob
+
+
+### Créer une conversation
+POST http://localhost:3001/conversations
+Content-Type: application/json
+
+{
+  "title": "Conversation sur les chats",
+  "user_id": 3
+}
+
+
 ### List des messages
 GET http://localhost:3001/conversations/1/messages
 
 
-### Information sur un user
-GET http://localhost:3001/users/bobby
-
-
 ### Liste des conversations
-GET http://localhost:3001/users/1/conversations
+GET http://localhost:3001/users/3/conversations
 
 
 ### Poser une question en mode single
-POST http://localhost:3001/conversations/2/messages:complete
+POST http://localhost:3001/conversations/1/messages:complete
 Content-Type: application/json
 
 {
@@ -34,7 +58,7 @@ Content-Type: application/json
 
 {
   "role": "user",
-  "content": "Et pour le Maroc ?"
+  "content": "De quelle couleur est le ciel ?"
 }
 
 ### Supprimer un message dans une conversation
