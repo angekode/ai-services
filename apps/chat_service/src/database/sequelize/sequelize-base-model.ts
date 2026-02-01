@@ -1,4 +1,4 @@
-import { type ModelInterface } from "../interfaces/interfaces.database.js";
+import { type ModelInterface, type GetOptions } from "../interfaces/interfaces.database.js";
 import { DataTypes, type ModelStatic, Model, Sequelize } from "sequelize";
 
 
@@ -9,7 +9,7 @@ export interface EntryMapper<TEntry, TAddEntry>  {
 };
 
 
-export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry> implements ModelInterface<TEntry, SequelizeQuery, TId, TAddEntry, TRemoveEntry> {
+export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEntry> implements ModelInterface<TEntry, SequelizeQuery, TId, TAddEntry, TRemoveEntry, TUpdateEntry> {
 
   protected client : Sequelize;
   model: ModelStatic<Model> | undefined;
@@ -22,13 +22,30 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry> implements
 
   init(): void {} // a override
 
-  async getAllEntries(): Promise<TEntry[]> {
-    const entries = await this.model?.findAll({ raw: true });
+  async getAllEntries(options?: GetOptions): Promise<TEntry[]> {
+
+    let request: any = { raw: true };
+    if (options?.ordering !== undefined) {
+      if (options.ordering.order === 'ascending') {
+        request.order = [[options.ordering.columnName, 'ASC']];
+      } else {
+        request.order = [[options.ordering.columnName, 'DESC']];
+      }
+    }
+    const entries = await this.model?.findAll(request);
     return entries?.map(e => this.#mapper.create(e)) ?? [];
   }
 
-  async getEntries(query: SequelizeQuery): Promise<TEntry[]> {
-    const entries = await this.model?.findAll({ where : query, raw: true });
+  async getEntries(query: SequelizeQuery, options?: GetOptions): Promise<TEntry[]> {
+    let request: any = { where : query, raw: true };
+    if (options?.ordering !== undefined) {
+      if (options.ordering.order === 'ascending') {
+        request.order = [[options.ordering.columnName, 'ASC']];
+      } else {
+        request.order = [[options.ordering.columnName, 'DESC']];
+      }
+    }
+    const entries = await this.model?.findAll(request);
     return entries?.map(e => this.#mapper.create(e)) ?? [];
   }
 
@@ -44,6 +61,12 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry> implements
   async addEntry(entry: TAddEntry) : Promise<TEntry | null> {
     const newEntry = await this.model?.create(entry as any);
     return newEntry ? this.#mapper.create(newEntry) : null;
+  }
+
+  async updateEntryWithId(id: TId, entry: TUpdateEntry) : Promise<TEntry | null> {
+    const entryToUpdate = await this.model?.findByPk(id as any);
+    const updatedEntry = await entryToUpdate?.update(entry as any);
+    return updatedEntry ? this.#mapper.create(updatedEntry) : null;
   }
 
   async removeEntry(entry: TRemoveEntry) : Promise<number> {

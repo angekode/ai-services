@@ -60,16 +60,18 @@ export default {
       throw new BadInputError('Id conversation manquant');
     }
 
- 
-    const conversations = await database.client.messageModel?.getEntries({ conversation_id: Number(req.params.conversationId) });
-    if (!conversations) {
+    const messagesHistory = await database.client.messageModel?.getEntries(
+      { conversation_id: Number(req.params.conversationId) },
+      { ordering: { order: 'ascending', columnName: 'created_at' }}
+    );
+    if (!messagesHistory) {
       res.status(500);
       res.send({error: 'Erreur interne'}); // pour ne pas faire fuiter les utilisateurs existants
       return;
     }
 
     res.status(200);
-    res.send(conversations);
+    res.send(messagesHistory);
     return;
   },
 

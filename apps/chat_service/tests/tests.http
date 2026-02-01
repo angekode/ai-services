@@ -58,7 +58,7 @@ Content-Type: application/json
 
 {
   "role": "user",
-  "content": "De quelle couleur est le ciel ?"
+  "content": "Et celle de l'herbe ?"
 }
 
 ### Supprimer un message dans une conversation

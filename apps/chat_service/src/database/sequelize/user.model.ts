@@ -17,6 +17,10 @@ type RemoveUserEntry = {
     username: string;
 };
 
+type UpdateUserEntry = {
+  username: string
+};
+
 class UserEntryMapper implements EntryMapper<UserEntry, AddUserEntry> {
   create(row: object) : UserEntry {
 
@@ -33,7 +37,7 @@ type Query = Record<string, unknown>;
 type UserId = number;
 
 
-export class UserModel extends SequelizeBaseModel<UserEntry, number, AddUserEntry, RemoveUserEntry>  {
+export class UserModel extends SequelizeBaseModel<UserEntry, number, AddUserEntry, RemoveUserEntry, UpdateUserEntry>  {
 
   constructor(client: Sequelize) {
     super(client, new UserEntryMapper());

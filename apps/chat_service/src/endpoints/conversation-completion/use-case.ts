@@ -50,12 +50,16 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
 
 
     // Récupération de l'historique de la conversation dans la base de donnée
-    const conversations = await database.client.messageModel?.getEntries({ conversation_id: Number(command.conversationId) });
-    if (!conversations) {
+    const dbFormattedMessagesHistory = await database.client.messageModel?.getEntries(
+      { conversation_id: Number(command.conversationId) }, 
+      { ordering: { order: 'ascending', columnName: 'created_at' }}
+    );
+    if (!dbFormattedMessagesHistory) {
       throw new ServerError(`Conversation non trouvée: ${command.conversationId}`);
     }
 
-    let messageHistory : Message[] = conversations.map(m => { 
+    // Conversation au format qui sera visible par le client de l'API
+    let messageHistory : Message[] = dbFormattedMessagesHistory.map(m => { 
       if (!['user', 'system', 'assistant'].includes(m.role)) {
         throw new ServerError('Role de message invalide');
       }
@@ -142,11 +146,14 @@ export class ConversationCompletionUseCase implements UseCase<ConversationComple
 
         // Enregistrement de la réponse même si elle est interrompue
         } finally {
-          const llmResponseSavedEntry = await database.client.messageModel?.addEntry({
-            role: 'assistant',
-            content: concatenatedResponse,
-            conversation_id: Number(command.conversationId)
-          });
+          await database.client.messageModel?.updateEntryWithId(
+            llmResponseSavedEntry.id,
+            {
+              role: 'assistant',
+              content: concatenatedResponse,
+              conversation_id: Number(command.conversationId)
+            }
+          );
         }
       }
 
