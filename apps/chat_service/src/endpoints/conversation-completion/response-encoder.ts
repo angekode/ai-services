@@ -95,6 +95,7 @@ async function encodeStream(res: Response, result: StreamResult<ConversationComp
 
       } else if (chunk.type === 'message.done') {
         res.write('data: [DONE]\n\n');
+        return res.end();
 
       } else if (chunk.type === 'error') {
         const bodyContent : OutputRequest_ErrorBody_Type = {
