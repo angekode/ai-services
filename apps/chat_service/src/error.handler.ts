@@ -2,7 +2,14 @@ import { BadInputError, ServerError, ProviderError } from "service_library";
 import { StatusCodes } from "http-status-codes";
 import { type Request, type Response, type NextFunction } from 'express';
 import { ZodError } from 'zod';
+import jwt from "jsonwebtoken";
 
+
+export class NotFoundError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
 
 export function errorHandler(error: unknown, req: Request, res: Response, next: NextFunction): void {
   if (error instanceof Error) {
@@ -28,6 +35,12 @@ export function errorHandler(error: unknown, req: Request, res: Response, next: 
     } else if (error instanceof ZodError) {
       res.status(StatusCodes.BAD_REQUEST);
       bodyJson.error.message = error.message;
+    
+    } else if (error instanceof NotFoundError) {
+      res.status(StatusCodes.NOT_FOUND);
+
+    } else if (error instanceof jwt.JsonWebTokenError) {
+      res.status(StatusCodes.UNAUTHORIZED);
 
     } else {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR);

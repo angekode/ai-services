@@ -3,6 +3,8 @@ import mainRouter from './routes/main.router.js';
 import { errorHandler } from './error.handler.js';
 import cors from 'cors';
 import logMiddlewares from './middlewares/log.middleware.js';
+import cookieParser from 'cookie-parser';
+
 
 export default {
 
@@ -12,6 +14,7 @@ export default {
     
     this.app.use(cors());
     this.app.use(express.json());
+    this.app.use(cookieParser());
 
     // Log
     this.app.use(logMiddlewares.logRequest);
