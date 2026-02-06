@@ -1,3 +1,7 @@
+### La liste de tous les utilisateurs
+GET http://localhost:3001/users
+
+
 ### Créer un utilisateur
 POST http://localhost:3001/users
 Content-Type: application/json
@@ -51,7 +55,7 @@ GET http://localhost:3001/conversations/1/messages
 
 
 ### Liste des conversations
-GET http://localhost:3001/users/4/conversations
+GET http://localhost:3001/users/1/conversations
 Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTc3MDMxODQyMCwiZXhwIjoxNzcwNDA0ODIwfQ.MyAuVPqNjnaV-VBxzzi5fV2i_Gux3UbCH-gPar8AqMk;
 
 

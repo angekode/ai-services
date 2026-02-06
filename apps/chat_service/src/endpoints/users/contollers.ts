@@ -7,6 +7,25 @@ import { BadInputError } from 'service_library';
 
 export default {
 
+  async getAllUsers(req: Request, res: Response): Promise<void> {
+
+    try {
+      
+      const users = await database.client.userModel?.getAllEntries();
+      res.status(StatusCodes.OK).json(users);
+
+    } catch (error) {
+      if (error instanceof Error) {
+        res.send({ error: error.message });
+        return;
+      }
+
+      res.send({ error: String(error) });
+      return;
+    }
+  },
+
+
   async getUserInformationFromUserName(req: Request, res: Response): Promise<void> {
     if (typeof req.params.username !== 'string') {
       res.status(400);

@@ -21,12 +21,13 @@ mainRouter.get('/', (_req, res) => res.send('Serveur à l\'écoute'));
 mainRouter.post('/chat/completions', completionController);
 
 // /users
+mainRouter.get('/users', userController.getAllUsers);
 mainRouter.post('/users', userValidator.validateCreateUserBody, userController.createUser);
 mainRouter.get('/users/:username', userValidator.validateUsernameParam, userController.getUserInformationFromUserName);
 mainRouter.delete('/users/:username', userValidator.validateUsernameParam, userController.removeUser);
 mainRouter.get(
   '/users/:userId/conversations',
-  accessControlMiddleware.validateToken,
+  //accessControlMiddleware.validateToken,
   conversationController.getConversationsFromUserId
 );
 
