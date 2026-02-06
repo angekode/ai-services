@@ -1,5 +1,7 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import zod, { ZodError } from 'zod';
+import { BadInputError } from 'service_library';
+
 
 const createUserBodyScheme = zod.object({
   username: zod.string(),
@@ -9,19 +11,13 @@ const createUserBodyScheme = zod.object({
 
 export default {
   validateCreateUserBody(req: Request, res: Response, next: NextFunction): void {
-    try {
-      createUserBodyScheme.parse(req.body);
-    } catch (error: unknown) {
-      next(error);
-    }
-
+    createUserBodyScheme.parse(req.body);
     next();
   },
 
-  validateUsernameParam(req: Request, res: Response, next: NextFunction): void {
-    if (typeof req.params.username !== 'string') {
-      next('Le nom d\'utilisateur n\'a pas un format valide');
-      return;
+  validateUserIdParam(req: Request, res: Response, next: NextFunction): void {
+    if (isNaN(Number(req.params.id))) {
+      throw new BadInputError('L\'identificateur du user n\'a pas un format valide');
     }
     next();
   }

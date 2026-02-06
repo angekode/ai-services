@@ -1,12 +1,41 @@
 import { type ModelInterface, type GetOptions } from "../interfaces/interfaces.database.js";
 import { DataTypes, type ModelStatic, Model, Sequelize } from "sequelize";
+import { UniqueConstraintError } from "sequelize";
 
 
 export type SequelizeQuery = Record<string, unknown>;
 
+
 export interface EntryMapper<TEntry, TAddEntry>  {
   create(row: object): TEntry;
 };
+
+
+class ModelUniqueConstraintError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
+
+class ModelError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
+
+function convertSequelizeError(error: unknown): ModelError {
+  if (error instanceof UniqueConstraintError ) {
+    return new ModelUniqueConstraintError(error.message);
+  }
+
+  if (error instanceof Error) {
+    return new ModelError(error.message);
+  }
+
+  return new ModelError(String(error));
+}
 
 
 export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEntry> implements ModelInterface<TEntry, SequelizeQuery, TId, TAddEntry, TRemoveEntry, TUpdateEntry> {
@@ -25,19 +54,27 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEnt
   async getAllEntries(options?: GetOptions): Promise<TEntry[]> {
 
     let request: any = { raw: true };
+    
     if (options?.ordering !== undefined) {
       if (options.ordering.order === 'ascending') {
         request.order = [[options.ordering.columnName, 'ASC']];
       } else {
         request.order = [[options.ordering.columnName, 'DESC']];
       }
+    } 
+
+    if (options?.attributes !== undefined) {
+      request.attributes = options.attributes;
     }
+
     const entries = await this.model?.findAll(request);
     return entries?.map(e => this.#mapper.create(e)) ?? [];
   }
 
   async getEntries(query: SequelizeQuery, options?: GetOptions): Promise<TEntry[]> {
+
     let request: any = { where : query, raw: true };
+
     if (options?.ordering !== undefined) {
       if (options.ordering.order === 'ascending') {
         request.order = [[options.ordering.columnName, 'ASC']];
@@ -45,6 +82,11 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEnt
         request.order = [[options.ordering.columnName, 'DESC']];
       }
     }
+    
+    if (options?.attributes !== undefined) {
+      request.attributes = options.attributes;
+    }
+
     const entries = await this.model?.findAll(request);
     return entries?.map(e => this.#mapper.create(e)) ?? [];
   }
@@ -71,16 +113,17 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEnt
 
   async removeEntry(entry: TRemoveEntry) : Promise<number> {
 
-    const rows = await this.model?.findAll({ where : entry as any });
-    if (!rows) {
-      return 0;
+    try {
+      const record = await this.model?.findOne({ where : entry as any });
+      if (!record) {
+        return 0;
+      }
+      record.destroy();
+      return 1;
+
+    } catch(error: unknown) {
+      throw convertSequelizeError(error);
     }
-    let count = 0;
-    for (const row of rows) {
-      await row.destroy();
-      count++;
-    }
-    return count;
   }
 
   async removeAllEntries(): Promise<number> {

@@ -23,8 +23,8 @@ mainRouter.post('/chat/completions', completionController);
 // /users
 mainRouter.get('/users', userController.getAllUsers);
 mainRouter.post('/users', userValidator.validateCreateUserBody, userController.createUser);
-mainRouter.get('/users/:username', userValidator.validateUsernameParam, userController.getUserInformationFromUserName);
-mainRouter.delete('/users/:username', userValidator.validateUsernameParam, userController.removeUser);
+mainRouter.get('/users/:id', userValidator.validateUserIdParam, userController.getUserInformationFromUserName);
+mainRouter.delete('/users/:id', userValidator.validateUserIdParam, userController.removeUser);
 mainRouter.get(
   '/users/:userId/conversations',
   //accessControlMiddleware.validateToken,

@@ -8,7 +8,8 @@ export type GetOptions = {
   ordering?: {
     order: 'ascending' | 'descending';
     columnName: string
-  }
+  },
+  attributes?: string[]
 };
 
 export interface ModelInterface<TEntry, TQuery, TId, TAddEntry, TRemoveEntry, TUpdateEntry> {

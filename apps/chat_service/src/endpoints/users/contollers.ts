@@ -2,7 +2,8 @@ import { type Request, type Response, type NextFunction } from 'express';
 import { UserModel } from '../../database/sequelize/user.model.js';
 import database from '../../database/client.js';
 import { StatusCodes } from 'http-status-codes';
-import { BadInputError } from 'service_library';
+import { BadInputError, ServerError } from 'service_library';
+import { NotFoundError } from '../../error.handler.js';
 
 
 export default {
@@ -11,8 +12,11 @@ export default {
 
     try {
       
-      const users = await database.client.userModel?.getAllEntries();
-      res.status(StatusCodes.OK).json(users);
+      const users = await database.client.userModel?.getAllEntries({ attributes: ['id', 'username'] });
+      if (!users) {
+        throw new ServerError('Aucun élément retourné');
+      }
+      res.status(StatusCodes.OK).json(users.map(e => ({ id: e.id, username: e.username })));
 
     } catch (error) {
       if (error instanceof Error) {
@@ -67,9 +71,12 @@ export default {
     try {
 
       const newUser = await database.client.userModel?.addEntry(req.body);
-      
+      if (!newUser) {
+        throw new ServerError('Utilisateur non crée dans la BDD');
+      }
+
       res.status(StatusCodes.CREATED);
-      res.json({ id: newUser?.id, username: newUser?.username });
+      res.json({ id: newUser.id, username: newUser.username });
       return;
       
     } catch (error) {
@@ -82,15 +89,15 @@ export default {
   async removeUser(req: Request, res: Response, next: NextFunction): Promise<void> {
 
     try {
-      if (!req.params.username) {
+      if (!req.params.id) {
         throw('req.params.username non défini');
       }
-      const count = await database.client.userModel?.removeEntry({ username: req.params.username });
+      const count = await database.client.userModel?.removeEntry({ id: Number(req.params.id) });
       if (count === 0) {
-        throw new BadInputError('Utilisateur non trouvé');
+        throw new NotFoundError('Utilisateur non supprimée');
       }
-      res.status(StatusCodes.OK);
-      res.json({ removedCount: count });
+      res.status(StatusCodes.NO_CONTENT);
+      res.end();
       return;
       
     } catch (error) {
