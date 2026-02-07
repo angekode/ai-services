@@ -89,10 +89,10 @@ export default {
   async removeUser(req: Request, res: Response, next: NextFunction): Promise<void> {
 
     try {
-      if (!req.params.id) {
+      if (!req.params.userId) {
         throw('req.params.username non défini');
       }
-      const count = await database.client.userModel?.removeEntry({ id: Number(req.params.id) });
+      const count = await database.client.userModel?.removeEntry({ id: Number(req.params.userId) });
       if (count === 0) {
         throw new NotFoundError('Utilisateur non supprimée');
       }

@@ -117,3 +117,39 @@ describe('DELETE /users', () => {
     assert.strictEqual(response.status, StatusCodes.NOT_FOUND);
   });  
 });
+
+
+describe('GET /users/:id/conversations', () => {
+  
+  it('retourne un tableau vide', async () => {
+    // Arrange
+    const user1 = await database.client.userModel?.addEntry({ username: "Bob", password: "password" });
+    
+    // Act 
+    const response = await fetch(`${process.env.API_URL}/users/${user1?.id}/conversations`);
+    const body = await response.json();
+    
+    // Assert
+    assert.strictEqual(response.status, StatusCodes.OK);
+    assert.ok(Array.isArray(body));
+    assert.strictEqual(body.length, 0);
+  });
+
+
+  it('retourne un tableau de conversations', async () => {
+    // Arrange
+    const user = await database.client.userModel?.addEntry({ username: "Bob", password: "password" });
+    const conversation = await database.client.conversationModel?.addEntry({ title: "titre", user_id: user!.id });
+    
+    // Act 
+    const response = await fetch(`${process.env.API_URL}/users/${user?.id}/conversations`);
+    const body = await response.json();
+    
+    // Assert
+    assert.strictEqual(response.status, StatusCodes.OK);
+    assert.ok(Array.isArray(body));
+    assert.strictEqual(body.length, 1);
+    assert.strictEqual(body[0].title, conversation?.title);
+    assert.strictEqual(body[0].user_id, conversation?.user_id);
+  });
+});

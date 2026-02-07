@@ -102,7 +102,7 @@ router.post(
  *         description: NOT_FOUND l'identifiant n'existe pas
  */
 router.get(
-  '/users/:id', 
+  '/users/:userId', 
   userValidator.validateUserIdParam, 
   userController.getUserInformationFromUserName
 );
@@ -128,7 +128,7 @@ router.get(
  *         description: NOT_FOUND l'identifiant n'existe pas
  */
 router.delete(
-  '/users/:id', 
+  '/users/:userId', 
   userValidator.validateUserIdParam, 
   userController.removeUser
 );

@@ -16,7 +16,7 @@ export default {
   },
 
   validateUserIdParam(req: Request, res: Response, next: NextFunction): void {
-    if (isNaN(Number(req.params.id))) {
+    if (isNaN(Number(req.params.userId))) {
       throw new BadInputError('L\'identificateur du user n\'a pas un format valide');
     }
     next();

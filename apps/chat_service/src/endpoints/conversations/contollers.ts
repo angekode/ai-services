@@ -3,6 +3,7 @@ import database from '../../database/client.js';
 import zod, { ZodError } from 'zod';
 import { StatusCodes } from 'http-status-codes';
 import { BadInputError } from 'service_library';
+import { NotFoundError } from '../../error.handler.js';
 
 
 const createConversationScheme = zod.object({ title: zod.string(), user_id: zod.number() });
@@ -38,13 +39,13 @@ export default {
     }
 
     //try {
+
+      const user = await database.client.userModel?.getEntryWithId(Number(req.params.userId));
+      if (!user) {
+        throw new NotFoundError('L\'utilisateur n\'existe pas');
+      }
   
       const conversations = await database.client.conversationModel?.getEntries({ user_id: Number(req.params.userId) });
-      if (!conversations) {
-        res.status(500);
-        res.send({error: 'Erreur interne'}); // pour ne pas faire fuiter les utilisateurs existants
-        return;
-      }
 
       res.status(200);
       res.send(conversations);
