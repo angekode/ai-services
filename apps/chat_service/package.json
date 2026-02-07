@@ -9,7 +9,9 @@
     "db:create": "node --env-file=.env ./dist/database/migrations/01.create-tables.js",
     "db:seed": "node --env-file=.env ./dist/database/migrations/02.seed-tables.js",
     "test:jest": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.mjs",
-    "test": "tsx --test --env-file=./tests/.env.test --import=./tests/global-test.ts"
+    "test": "tsx --test --env-file=./tests/.env.test --import=./tests/global-test.ts",
+    "doc:generate": "tsx ./doc/generate-openapi.ts",
+    "doc:start": "tsx ./doc/serve-openapi.ts"
   },
   "type": "module",
   "devDependencies": {
@@ -17,10 +19,12 @@
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^25.0.3",
+    "@types/node": "^25.2.1",
     "@types/supertest": "^6.0.3",
     "httpyac": "^6.16.7",
     "supertest": "^7.2.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "ts-jest": "^29.4.6",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
