@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import userValidator from '../endpoints/users/validators.js';
-import userController from '../endpoints/users/contollers.js';
+import userValidator from '../endpoints/users/user.validators.js';
+import userController from '../endpoints/users/user.contollers.js';
 import conversationController from '../endpoints/conversations/contollers.js';
 
 

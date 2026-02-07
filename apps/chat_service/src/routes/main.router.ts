@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import { completionController } from '../endpoints/chat-completion/controllers/completion.controller.js';
 import messageController from '../endpoints/messages/message.controller.js';
-import userController from '../endpoints/users/contollers.js';
+import userController from '../endpoints/users/user.contollers.js';
 
 import conversationController from '../endpoints/conversations/contollers.js';
 
