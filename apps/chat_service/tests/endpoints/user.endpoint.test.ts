@@ -78,7 +78,7 @@ describe('POST /users', () => {
 });
 
 
-describe('DELETE /users', () => {
+describe('DELETE /users/:id', () => {
   
   it('supprime un user', async () => {
     // Arrange
@@ -116,6 +116,41 @@ describe('DELETE /users', () => {
     // Assert
     assert.strictEqual(response.status, StatusCodes.NOT_FOUND);
   });  
+});
+
+
+describe('GET /users/:id', () => {
+  
+  it('utilisateur non existant', async () => {
+    // Act 
+    const response = await fetch(`${process.env.API_URL}/users/15198`);
+    // Assert
+    assert.strictEqual(response.status, StatusCodes.NOT_FOUND);
+  });
+
+
+  it('id utilisateur invalide', async () => {
+    // Act 
+    const response = await fetch(`${process.env.API_URL}/users/affaf`);
+    // Assert
+    assert.strictEqual(response.status, StatusCodes.BAD_REQUEST);
+  });
+
+
+  it('retourne un utilisateur', async () => {
+    // Arrange
+    const user = await database.client.userModel?.addEntry({ username: "Bob", password: "password" });
+    
+    // Act 
+    const response = await fetch(`${process.env.API_URL}/users/${user?.id}`);
+    const body = await response.json();
+    
+    // Assert
+    assert.strictEqual(response.status, StatusCodes.OK);
+    assert.strictEqual(body.id, user?.id);
+    assert.strictEqual(body.username, user?.username);
+    assert.strictEqual(body.password, undefined);
+  });
 });
 
 

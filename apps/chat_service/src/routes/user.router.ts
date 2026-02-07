@@ -10,8 +10,7 @@ const router = Router();
  * @openapi
  * /users:
  *   get:
- *     summary:
- *       Renvoie la liste des utilisateurs
+ *     summary: Renvoie la liste des utilisateurs
  *     responses:
  *       '200':
  *         description: OK
@@ -23,7 +22,7 @@ const router = Router();
  *                 type: object
  *                 properties:
  *                   id:
- *                     type: number
+ *                     type: integer
  *                   username:
  *                     type: string
  */
@@ -104,7 +103,7 @@ router.post(
 router.get(
   '/users/:userId', 
   userValidator.validateUserIdParam, 
-  userController.getUserInformationFromUserName
+  userController.getUserById
 );
 
 
@@ -156,11 +155,11 @@ router.delete(
  *                 type: object
  *                 properties:
  *                   id:
- *                     type: number
+ *                     type: integer
  *                   title:
  *                     type: string
  *                   user_id:
- *                     type: number
+ *                     type: integer
  *       '400':
  *         description: BAD_REQUEST l'identifiant a un format invalide
  *       '404':

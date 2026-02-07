@@ -30,37 +30,22 @@ export default {
   },
 
 
-  async getUserInformationFromUserName(req: Request, res: Response): Promise<void> {
-    if (typeof req.params.username !== 'string') {
-      res.status(400);
-      res.send({error: 'Nom d\'utilisateur manquant'});
-      return;
-    }
-    if (!req.params.username.match(/^\w+$/)) {
-      res.status(400);
-      res.send({error: 'Nom d\'utilisateur invalide'});
-      return;
-    }
+  async getUserById(req: Request, res: Response, next: NextFunction): Promise<void> {
 
     try {
-      const user = await database.client.userModel?.getFirstEntry({ username: req.params.username });
-      if (!user) {
-        res.status(500);
-        res.send({error: 'Erreur interne'}); // pour ne pas faire fuiter les utilisateurs existants
-        return;
-      }
-    
-      res.status(200);
-      res.send({ id: user.id, username: user.username });
-      return;
-      
-    } catch (error) {
-      if (error instanceof Error) {
-        res.send({ error: error.message });
-        return;
+      if (!req.params.userId) {
+        throw('req.params.username non défini');
       }
 
-      res.send({ error: String(error) });
+      const user = await database.client.userModel?.getEntryWithId(Number(req.params.userId));
+      if (!user) {
+        throw new NotFoundError('Utilisateur inconnu');
+      }
+      res.status(StatusCodes.OK);
+      res.json({ id: user.id, username: user.username });
+      
+    } catch (error) {
+      next(error);
       return;
     }
   },
