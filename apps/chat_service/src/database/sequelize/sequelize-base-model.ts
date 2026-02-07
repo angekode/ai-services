@@ -1,5 +1,6 @@
-import { type ModelInterface, type GetOptions } from "../interfaces/interfaces.database.js";
+import type { ModelInterface, GetOptions } from "../interfaces/model.interface.js";
 import { type ModelStatic, Model, Sequelize, UniqueConstraintError, DatabaseError } from "sequelize";
+import { ModelError, UniqueConstraintModelError, QueryModelError, NotFoundModelError } from '../interfaces/model-errors.js';
 
 
 /**
@@ -8,6 +9,7 @@ import { type ModelStatic, Model, Sequelize, UniqueConstraintError, DatabaseErro
  * https://sequelize.org/docs/v6/core-concepts/model-querying-basics/#applying-where-clauses
  */
 export type SequelizeQuery = Record<string, unknown>;
+
 
 /**
  * Convertion entre le résultat des requêtes Sequelize (row)
@@ -19,46 +21,11 @@ export interface EntryMapper<TEntry, TAddEntry>  {
 
 
 /**
- * Classe de base renvoyée par SequelizeBaseModel quand une exception
- * est levée par sequelize. 
- */
-class ModelError extends Error {
-  constructor(message: string) {
-    super(message);
-  }
-}
-
-/**
- * Quand la contrainte unique est violée par une requête on renvoie
- * cette exception plutôt que de laisser passer celle de Sequelize.
- */
-class UniqueConstraintModelError extends ModelError {
-  constructor(message: string) {
-    super(message);
-  }
-}
-
-
-class QueryModelError extends ModelError {
-  constructor(message: string) {
-    super(message);
-  }
-}
-
-class NotFoundModelError extends ModelError {
-  constructor(message: string) {
-    super(message);
-  }
-}
-
-
-
-/**
  * Convertie toutes les exception Sequelize en un équivalant basé
  * sur ModelError.
  * https://sequelize.org/api/v6/identifiers.html#errors
  */
-function convertSequelizeError(error: unknown): ModelError {
+function convertToModelError(error: unknown): ModelError {
 
   // Erreurs en provenance de Sequelize à convertir
   if (error instanceof UniqueConstraintError ) {
@@ -146,7 +113,7 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEnt
       return entries.map(e => this.#mapper.create(e));
     
     } catch (error) {
-      throw convertSequelizeError(error);
+      throw convertToModelError(error);
     }
   }
   
@@ -189,7 +156,7 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEnt
       return entries.map(e => this.#mapper.create(e));
       
     } catch(error) {
-      throw convertSequelizeError(error);
+      throw convertToModelError(error);
     }
   }
 
@@ -216,7 +183,7 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEnt
       return this.#mapper.create(entry);
 
     } catch(error) {
-      throw convertSequelizeError(error);
+      throw convertToModelError(error);
     }
   }
   
@@ -242,7 +209,7 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEnt
       return this.#mapper.create(entry);
 
     } catch(error) {
-      throw convertSequelizeError(error);
+      throw convertToModelError(error);
     }
   }
 
@@ -264,7 +231,7 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEnt
       return this.#mapper.create(newEntry);
 
     } catch(error) {
-      throw convertSequelizeError(error);
+      throw convertToModelError(error);
     }
   }
 
@@ -291,7 +258,7 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEnt
       return this.#mapper.create(updatedEntry);
 
     } catch(error) {
-      throw convertSequelizeError(error);
+      throw convertToModelError(error);
     }
   }
 
@@ -315,7 +282,7 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEnt
       return 1;
 
     } catch(error: unknown) {
-      throw convertSequelizeError(error);
+      throw convertToModelError(error);
     }
   }
 
@@ -336,7 +303,7 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEnt
       return this.model.destroy({ where: {} });
 
     } catch(error: unknown) {
-      throw convertSequelizeError(error);
+      throw convertToModelError(error);
     }
   }
 };
