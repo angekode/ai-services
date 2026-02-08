@@ -11,7 +11,7 @@ export default {
   },
 
   async close() {
-  await this.client.close();
+    await this.client.close();
   }
 };
 

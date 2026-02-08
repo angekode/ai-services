@@ -14,7 +14,7 @@ type AddUserEntry = {
 };
 
 type RemoveUserEntry = {
-    username: string;
+    id: number;
 };
 
 type UpdateUserEntry = {
