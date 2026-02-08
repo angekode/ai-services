@@ -1,11 +1,16 @@
 import { Router } from 'express';
 import conversationController from '../endpoints/conversations/conversation.contollers.js';
-import messageController from '../endpoints/messages/message.controller.js';
-import { conversationCompletionController } from '../endpoints/conversation-completion/controller.js';
 import conversationMiddlewares from '../endpoints/conversations/conversation.middlewares.js';
 
 
 const router = Router();
+
+
+/**
+ * ------------------------------------------------------------------------
+ * /conversations (GET/POST/PATCH/DELETE)
+ * ------------------------------------------------------------------------
+ */
 
 
 /**
@@ -140,16 +145,6 @@ router.delete(
   conversationMiddlewares.validateConversationIdParam,
   conversationController.removeConversation
 );
-
-
-
-
-
-
-router.get('/conversations/:conversationId/messages', conversationController.getMessagesFromConversationId);
-router.post('/conversations/:conversationId/messages:complete', conversationCompletionController);
-
-router.post('/conversations/:conversationId/messages', conversationController.createMessageForConversation, messageController.createMessage);
 
 
 export default router;

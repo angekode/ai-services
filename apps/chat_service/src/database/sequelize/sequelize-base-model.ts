@@ -219,7 +219,7 @@ export class SequelizeBaseModel<TEntry, TId, TAddEntry, TRemoveEntry, TUpdateEnt
    * @returns L'entrée créée (avec les valeurs persistées), ou `null` si l'insertion a échoué.
    * @throws ModelError en cas d'erreur
    */
-  async addEntry(entry: TAddEntry) : Promise<TEntry | null> {
+  async addEntry(entry: TAddEntry) : Promise<TEntry> {
     if (!this.model) {
       throw new ModelError('Modèle non initialisé');
     }
