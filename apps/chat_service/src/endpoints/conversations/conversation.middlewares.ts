@@ -1,6 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
 import { BadInputError } from 'service_library';
 import zod from 'zod';
+import database from '../../database/client.js';
+import { NotFoundError } from '../../error.handler.js';
 
 
 const createBodyScheme = zod.object({
@@ -25,6 +27,15 @@ export default {
       throw new BadInputError('Identifiant de la conversaiton invalide');
     }
     
+    next();
+  },
+
+
+  async checkConversationIdExists(req: Request, res: Response, next: NextFunction) {
+    const conversation = await database.client.conversationModel?.getEntryWithId(Number(req.params.conversationId));
+    if (!conversation) {
+      throw new NotFoundError('La conversation n\'existe pas');
+    }
     next();
   },
 

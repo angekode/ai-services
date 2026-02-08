@@ -14,6 +14,7 @@ import {
   type ConversationCompletionOutputRequestStreamType,
   type OutputRequest_ErrorBody_Type
 } from './output.request.js';
+import { StatusCodes } from 'http-status-codes';
 
 
 export class ConversationCompletionResponseEncoder implements ResponseEncoder<Response, ConversationCompletionUseCaseResultSingleValue, ConversationCompletionUseCaseResultStreamValue, Context> {
@@ -56,6 +57,7 @@ function encodeSingle(res: Response, result: SingleResult<ConversationCompletion
 
   encodeHeaders(res, context);
   res.setHeader('Content-Type', 'application/json');
+  res.status(StatusCodes.CREATED);
   res.write(JSON.stringify(bodyContent));
   res.end();
 }
@@ -70,6 +72,7 @@ type StreamResult<TOut, TChunk> = Extract<
 async function encodeStream(res: Response, result: StreamResult<ConversationCompletionUseCaseResultSingleValue, ConversationCompletionUseCaseResultStreamValue>, context: Context) {
   encodeHeaders(res, context); // headers de tracking
   res.setHeader('Content-Type', 'text/event-stream');
+  res.status(StatusCodes.CREATED);
   res.flushHeaders(); // envoie les headers immédiatement et pas seulement au moment du 1er write (important pour 'text/event-stream')
 
   let abordRequested = false;

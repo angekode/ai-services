@@ -42,6 +42,7 @@ const router = Router();
  *                     type: string
  *                   role:
  *                     type: string
+ *                     enum: [user, system, assistant]
  *                   conversation_id:
  *                     type: integer
  */
@@ -73,6 +74,7 @@ router.get(
  *             properties:
  *               role:
  *                 type: string
+ *                 enum: [user, system, assistant]
  *               content:
  *                 type: string
  *     responses:
@@ -101,17 +103,68 @@ router.post(
 
 
 
-
+/**
+ * @openapi
+ * /conversations/${id}/messages:complete:
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       required: true
+ *       schema:
+ *         type: integer
+ *   post:
+ *     summary: Génère un message de réponse à partir des messages de la conversation
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [stream]
+ *             properties:
+ *               stream:
+ *                 type: boolean
+ *     responses:
+ *       '200':
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   description: >
+ *                     Identifiant du message à utiliser dans toutes les routes
+ *                     (remplace l'usage de l'id OpenAI de completion).
+ *                 choices:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       finish_reason:
+ *                         type: string
+ *                         enum: [stop]
+ *                       index:
+ *                         type: integer
+ *                       message:
+ *                         type: object
+ *                         required:
+ *                           - role
+ *                           - content
+ *                         properties:
+ *                           role:
+ *                             type: string
+ *                             enum: [assistant]
+ *                           content:
+ *                             type: string
+ */
 router.post(
   '/conversations/:conversationId/messages:complete', 
+  conversationMiddlewares.validateConversationIdParam,
+  conversationMiddlewares.checkConversationIdExists,
+  messageValidator.validateConversationCompleteBody,
   conversationCompletionController
-);
-
-
-router.post(
-  '/conversations/:conversationId/messages', 
-  conversationController.createMessageForConversation, 
-  messageController.createMessage
 );
 
 
