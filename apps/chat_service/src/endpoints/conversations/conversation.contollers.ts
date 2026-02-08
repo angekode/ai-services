@@ -1,44 +1,52 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import database from '../../database/client.js';
-import zod, { ZodError } from 'zod';
+import zod from 'zod';
 import { StatusCodes } from 'http-status-codes';
-import { BadInputError } from 'service_library';
+import { BadInputError, ServerError } from 'service_library';
 import { NotFoundError } from '../../error.handler.js';
 
 
 const createConversationScheme = zod.object({ title: zod.string(), user_id: zod.number() });
 
+
 export default {
 
+
+  async getAllConversations(req: Request, res: Response) : Promise<void> {
+
+    const conversations = await database.client.conversationModel?.getAllEntries();
+    res.status(StatusCodes.OK);
+    res.json(conversations);
+  },
+
+
   async createConversation(req: Request, res: Response) : Promise<void> {
-    if (!req.body) {
-      throw new BadInputError('Mauvais format de données ou json manquant');
-    }
-      
-    const bodyJson = createConversationScheme.parse(req.body);
-    const newConversation = await database.client.conversationModel?.addEntry(bodyJson);
+
+    const newConversation = await database.client.conversationModel?.addEntry(req.body);
 
     if (!newConversation) {
-      res.status(500);
-      res.send({ error: 'Erreur interne'});
-      return;
+      throw new ServerError('La conversation n\'a pas été mise à jour');
     }
 
     res.status(StatusCodes.CREATED);
-    res.send(newConversation);
-    return;
+    res.json(newConversation);
+  },
+
+
+  async updateConversation(req: Request, res: Response) : Promise<void> {
+    
+    const updatedConversation = await database.client.conversationModel?.updateEntryWithId(Number(req.params.conversationId), req.body);
+
+    if (!updatedConversation) {
+      throw new ServerError('La conversation n\'a pas été mise à jour');
+    }
+
+    res.status(StatusCodes.OK);
+    res.json(updatedConversation);
   },
 
 
   async getConversationsFromUserId(req: Request, res: Response): Promise<void> {
-    if (typeof req.params.userId !== 'string') {
-      throw new BadInputError('Id utilisateur manquant');
-    }
-    if (!req.params.userId.match(/^\d+$/)) {
-      throw new BadInputError('Nom d\'utilisateur invalide');
-    }
-
-    //try {
 
       const user = await database.client.userModel?.getEntryWithId(Number(req.params.userId));
       if (!user) {
@@ -76,22 +84,27 @@ export default {
     return;
   },
 
+  
   async removeConversation(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
 
-      const count = await database.client.conversationModel?.removeEntry({ id: Number(req.params.conversationId) });
-      if (count === 0) {
-        throw new BadInputError('Id de la conversation innexistant');
-      }
-
-      res.status(StatusCodes.OK);
-      res.json({ removedCount: count });
-      return;
-
-    } catch (error) {
-      next(error);
+    if (!req.params.conversationId) {
+      throw new ServerError('Id de la conversation manquante');
     }
+
+    const conversation = await database.client.conversationModel?.getEntryWithId(Number(req.params.conversationId));
+    if (!conversation) {
+      throw new NotFoundError('Conversation inexistante');
+    }
+
+    const count = await database.client.conversationModel?.removeEntry({ id: Number(req.params.conversationId) });
+    if (count === 0) {
+      throw new ServerError('La conversation n\' pas été supprimée');
+    }
+
+    res.status(StatusCodes.NO_CONTENT);
+    res.end();
   },
+
 
   async createMessageForConversation(req: Request, res: Response, next: NextFunction): Promise<void> {
     const requestJson = req.body;

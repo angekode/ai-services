@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { type Request, type Response, type NextFunction } from 'express';
 import { ZodError } from 'zod';
 import jwt from "jsonwebtoken";
-
+import { ModelError, NotFoundModelError, UniqueConstraintModelError, QueryModelError } from "./database/interfaces/model-errors.js";
 
 export class NotFoundError extends Error {
   constructor(message: string) {
@@ -23,6 +23,7 @@ export function errorHandler(error: unknown, req: Request, res: Response, next: 
       }
     };
 
+    // Erreurs du service
     if (error instanceof BadInputError) {
       res.status(StatusCodes.BAD_REQUEST);
 
@@ -41,6 +42,19 @@ export function errorHandler(error: unknown, req: Request, res: Response, next: 
 
     } else if (error instanceof jwt.JsonWebTokenError) {
       res.status(StatusCodes.UNAUTHORIZED);
+
+    // Erreurs base de données
+    } else if (error instanceof NotFoundModelError) {
+      res.status(StatusCodes.NOT_FOUND);
+
+    } else if (error instanceof UniqueConstraintModelError) {
+      res.status(StatusCodes.CONFLICT);
+    
+    } else if (error instanceof QueryModelError) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+
+    } else if (error instanceof ModelError) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR);
 
     } else {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR);

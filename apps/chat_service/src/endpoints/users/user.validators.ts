@@ -1,5 +1,5 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import zod, { ZodError } from 'zod';
+import zod from 'zod';
 import { BadInputError } from 'service_library';
 
 

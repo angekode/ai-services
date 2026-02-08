@@ -9,7 +9,7 @@
     "db:create": "node --env-file=.env ./dist/database/migrations/01.create-tables.js",
     "db:seed": "node --env-file=.env ./dist/database/migrations/02.seed-tables.js",
     "test:jest": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.mjs",
-    "test": "tsx --test --env-file=./tests/.env.test --import=./tests/global-test.ts",
+    "test": "tsx --test --test-concurrency=1 --env-file=./tests/.env.test --import=./tests/global-test.ts",
     "doc:generate": "tsx ./doc/generate-openapi.ts",
     "doc:start": "tsx ./doc/serve-openapi.ts"
   },
