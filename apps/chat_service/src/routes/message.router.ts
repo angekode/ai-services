@@ -7,7 +7,7 @@ const router = Router();
 
 /**
  * @openapi
- * /users:
+ * /messages:
  *   get:
  *     summary: Renvoie la liste de tous les messages
  *     responses:
@@ -99,6 +99,8 @@ router.post(
  *                   type: string
  *                 content:
  *                   type: string
+ *                 conversation_id:
+ *                   type: integer
  *       '400':
  *         description: BAD_REQUEST l'identifiant a un format invalide
  *       '404':

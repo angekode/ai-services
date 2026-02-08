@@ -156,3 +156,4 @@ describe('GET /messages/:id', () => {
     assert.strictEqual(body.conversation_id, message?.conversation_id);
   });
 });
+

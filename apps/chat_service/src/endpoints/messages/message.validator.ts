@@ -10,12 +10,25 @@ const createMessageBodyScheme = zod.object({
 });
 
 
+
+const createMessageNoConversationIdBodyScheme = zod.object({
+  role: zod.literal(['user', 'assistant', 'system']),
+  content: zod.string()
+});
+
 export default {
 
   async validateCreateMessageBody(req: Request, res: Response, next: NextFunction) {
     createMessageBodyScheme.parse(req.body);
     next();
   },
+
+
+  async validateCreateMessageNoConversationIdBody(req: Request, res: Response, next: NextFunction) {
+    createMessageNoConversationIdBodyScheme.parse(req.body);
+    next();
+  },
+
   
   async validateMessageIdParam(req: Request, res: Response, next: NextFunction) {
     if (!req.params.messageId) {

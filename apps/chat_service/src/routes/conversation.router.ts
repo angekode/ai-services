@@ -82,8 +82,14 @@ router.post(
 
 /**
  * @openapi
- * /conversations:
+ * /conversations/{id}:
  *   patch:
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       required: true
+ *       schema:
+ *         type: integer
  *     summary: Modifie conversation
  *     requestBody:
  *       required: true
