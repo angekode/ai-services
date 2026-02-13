@@ -1,0 +1,17 @@
+{
+  "name": "service_library",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^18.19.130",
+    "typescript": "^5.9.3"
+  }
+}
