@@ -1,0 +1,90 @@
+### La liste de tous les utilisateurs
+GET http://localhost:3001/users
+
+
+### Créer un utilisateur
+POST http://localhost:3001/users
+Content-Type: application/json
+
+{
+  "username": "Bob",
+  "password": "password"
+}
+
+
+### Information sur un user
+GET http://localhost:3001/users/Bob
+
+
+### Supprimer un User
+DELETE http://localhost:3001/users/Bob
+
+
+### Créer un nouvel utilisateur
+POST http://localhost:3001/register
+Content-Type: application/json
+
+{
+  "username": "nicolas",
+  "password": "nicolas"
+}
+
+
+### Obtenir un token
+POST http://localhost:3001/login
+Content-Type: application/json
+
+{
+  "username": "nicolas",
+  "password": "nicolas"
+}
+
+
+### Créer une conversation
+POST http://localhost:3001/conversations
+Content-Type: application/json
+
+{
+  "title": "Conversation sur les chats",
+  "user_id": 3
+}
+
+
+### List des messages
+GET http://localhost:3001/conversations/1/messages
+
+
+### Liste des conversations
+GET http://localhost:3001/users/1/conversations
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTc3MDMxODQyMCwiZXhwIjoxNzcwNDA0ODIwfQ.MyAuVPqNjnaV-VBxzzi5fV2i_Gux3UbCH-gPar8AqMk;
+
+
+### Poser une question en mode single
+POST http://localhost:3001/conversations/1/messages:complete
+Content-Type: application/json
+
+{
+  "stream": false
+}
+
+
+
+### Poser une question en mode stream
+POST http://localhost:3001/conversations/1/messages:complete
+Content-Type: application/json
+
+{
+  "stream": true
+}
+
+### Créer un message dans une conversation
+POST http://localhost:3001/conversations/1/messages
+Content-Type: application/json
+
+{
+  "role": "user",
+  "content": "Et celle de l'herbe ?"
+}
+
+### Supprimer un message dans une conversation
+DELETE http://localhost:3001/messages/48
