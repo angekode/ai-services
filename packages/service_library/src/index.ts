@@ -1,6 +1,6 @@
 export { type Context, createContext } from './endpoint-base/context.type.js';
 
-export { 
+export {
   type RequestDecoder,
   type UseCaseResult,
   type UseCase,
@@ -10,9 +10,9 @@ export {
 } from './endpoint-base/endpoint.interface.js';
 
 export {
-  type BadInputError,
-  type ServerError,
-  type ProviderError
+  BadInputError,
+  ServerError,
+  ProviderError
 } from './endpoint-base/error.js';
 
 export {
