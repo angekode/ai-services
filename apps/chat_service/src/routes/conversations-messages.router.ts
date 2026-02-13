@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import conversationController from '../endpoints/conversations/conversation.contollers.js';
-import messageController from '../endpoints/messages/message.controller.js';
-import { conversationCompletionController } from '../endpoints/conversation-completion/controller.js';
-import conversationMiddlewares from '../endpoints/conversations/conversation.middlewares.js';
-import messageValidator from '../endpoints/messages/message.validator.js';
+import conversationController from '../endpoints/conversations/conversation.contollers.ts';
+import messageController from '../endpoints/messages/message.controller.ts';
+import { conversationCompletionController } from '../endpoints/conversation-completion/controller.ts';
+import conversationMiddlewares from '../endpoints/conversations/conversation.middlewares.ts';
+import messageValidator from '../endpoints/messages/message.validator.ts';
 
 
 const router = Router();

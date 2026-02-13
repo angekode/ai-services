@@ -1,4 +1,4 @@
-import { SequelizeBaseModel, type EntryMapper } from './sequelize-base-model.js';
+import { SequelizeBaseModel, type EntryMapper } from './sequelize-base-model.ts';
 import { DataTypes, type ModelStatic, Model, Sequelize } from "sequelize";
 
 

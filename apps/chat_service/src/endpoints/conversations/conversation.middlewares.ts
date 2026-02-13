@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
 import { BadInputError } from 'service_library';
 import zod from 'zod';
-import database from '../../database/client.js';
-import { NotFoundError } from '../../error.handler.js';
+import database from '../../database/client.ts';
+import { NotFoundError } from '../../error.handler.ts';
 
 
 const createBodyScheme = zod.object({

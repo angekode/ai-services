@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
-import database from '../../database/client.js';
+import database from '../../database/client.ts';
 import { ServerError, BadInputError} from "service_library";
-import { NotFoundError } from '../../error.handler.js';
+import { NotFoundError } from '../../error.handler.ts';
 import jwt from 'jsonwebtoken';
 import { StatusCodes } from 'http-status-codes';
 

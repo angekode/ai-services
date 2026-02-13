@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import conversationController from '../endpoints/conversations/conversation.contollers.js';
-import conversationMiddlewares from '../endpoints/conversations/conversation.middlewares.js';
+import conversationController from '../endpoints/conversations/conversation.contollers.ts';
+import conversationMiddlewares from '../endpoints/conversations/conversation.middlewares.ts';
 
 
 const router = Router();

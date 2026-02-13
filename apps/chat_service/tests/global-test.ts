@@ -1,6 +1,6 @@
 import { before, beforeEach, after } from 'node:test';
-import database from '../src/database/client.js';
-import server from '../src/server.js';
+import database from '../src/database/client.ts';
+import server from '../src/server.ts';
 
 before(async () => {
   await database.init();

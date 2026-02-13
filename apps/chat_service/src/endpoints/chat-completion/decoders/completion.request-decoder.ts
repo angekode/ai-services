@@ -12,9 +12,9 @@ import {
 import {
   inputRequestBody_Completion_Scheme,
   INPUT_REQUEST_MODEL_PATTERN
-} from '../requests/completion.input.request.js';
+} from '../requests/completion.input.request.ts';
 
-import { type CompletionCommand } from '../types/completion.command.js';
+import { type CompletionCommand } from '../types/completion.command.ts';
 
 
 export class CompletionRequestDecoder implements RequestDecoder<

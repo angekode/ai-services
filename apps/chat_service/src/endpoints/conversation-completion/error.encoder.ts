@@ -8,7 +8,7 @@ import {
   ProviderError
 } from 'service_library';
 
-import { type OutputRequest_ErrorBody_Type} from './output.request.js';
+import { type OutputRequest_ErrorBody_Type} from './output.request.ts';
 
 
 export class ConversationCompletionErrorEncoder implements ErrorEncoder<Response> {

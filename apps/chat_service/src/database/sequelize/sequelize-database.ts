@@ -8,11 +8,11 @@ import {
 
 // Database
 import type { DatabaseInterface } from "../interfaces/database.interface.js";
-import { DatabaseError, ConnectionDatabaseError } from '../interfaces/database-errors.js';
+import { DatabaseError, ConnectionDatabaseError } from '../interfaces/database-errors.ts';
 
 // Models
-import { ConversationModel } from './conversation.model.js';
-import { MessageModel } from './message.model.js';
+import { ConversationModel } from './conversation.model.ts';
+import { MessageModel } from './message.model.ts';
 import { UserModel } from "./user.model.js";
 
 

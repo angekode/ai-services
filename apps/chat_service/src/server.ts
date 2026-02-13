@@ -1,8 +1,8 @@
 import express from 'express';
-import mainRouter from './routes/main.router.js';
-import { errorHandler } from './error.handler.js';
+import mainRouter from './routes/main.router.ts';
+import { errorHandler } from './error.handler.ts';
 import cors from 'cors';
-import logMiddlewares from './middlewares/log.middleware.js';
+import logMiddlewares from './middlewares/log.middleware.ts';
 import cookieParser from 'cookie-parser';
 
 

@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import userValidator from '../endpoints/users/user.validators.js';
-import userController from '../endpoints/users/user.contollers.js';
-import conversationController from '../endpoints/conversations/conversation.contollers.js';
+import userValidator from '../endpoints/users/user.validators.ts';
+import userController from '../endpoints/users/user.contollers.ts';
+import conversationController from '../endpoints/conversations/conversation.contollers.ts';
 
 
 const router = Router();

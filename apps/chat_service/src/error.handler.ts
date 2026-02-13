@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { type Request, type Response, type NextFunction } from 'express';
 import { ZodError } from 'zod';
 import jwt from "jsonwebtoken";
-import { ModelError, NotFoundModelError, UniqueConstraintModelError, QueryModelError } from "./database/interfaces/model-errors.js";
+import { ModelError, NotFoundModelError, UniqueConstraintModelError, QueryModelError } from "./database/interfaces/model-errors.ts";
 
 export class NotFoundError extends Error {
   constructor(message: string) {

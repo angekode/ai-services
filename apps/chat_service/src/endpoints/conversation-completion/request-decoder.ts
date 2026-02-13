@@ -1,8 +1,8 @@
 import { BadInputError, type RequestDecoder } from 'service_library';
 import { type Request } from 'express';
-import { type ConversationCompletionCommand } from './command.js';
+import { type ConversationCompletionCommand } from './command.ts';
 import { type Context } from 'service_library';
-import { conversationCompletionScheme } from './input.request.js';
+import { conversationCompletionScheme } from './input.request.ts';
 
 
 export class ConversationCompletionRequestDecoder implements RequestDecoder<Request, ConversationCompletionCommand, Context> {

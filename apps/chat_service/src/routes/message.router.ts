@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import messageController from '../endpoints/messages/message.controller.js';
-import messageValidator from '../endpoints/messages/message.validator.js';
+import messageController from '../endpoints/messages/message.controller.ts';
+import messageValidator from '../endpoints/messages/message.validator.ts';
 
 const router = Router();
 

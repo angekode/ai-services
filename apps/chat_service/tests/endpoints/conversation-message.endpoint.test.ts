@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import { StatusCodes } from 'http-status-codes';
-import database from '../../src/database/client.js';
+import database from '../../src/database/client.ts';
 
 
 describe('GET /conversations/:conversationId/messages', () => {

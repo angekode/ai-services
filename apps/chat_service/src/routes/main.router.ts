@@ -1,12 +1,12 @@
 import { Router } from 'express';
 
-import authController from '../endpoints/auth/auth.controller.js';
-import authMiddleware from '../endpoints/auth/auth.middleware.js';
-import conversationMessageRouter from './conversations-messages.router.js';
-import conversationRouter from './conversation.router.js';
-import messageRouter from './message.router.js';
-import userController from '../endpoints/users/user.contollers.js';
-import userRouter from './user.router.js';
+import authController from '../endpoints/auth/auth.controller.ts';
+import authMiddleware from '../endpoints/auth/auth.middleware.ts';
+import conversationMessageRouter from './conversations-messages.router.ts';
+import conversationRouter from './conversation.router.ts';
+import messageRouter from './message.router.ts';
+import userController from '../endpoints/users/user.contollers.ts';
+import userRouter from './user.router.ts';
 
 
 const mainRouter = Router();

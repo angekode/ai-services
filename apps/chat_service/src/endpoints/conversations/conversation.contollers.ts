@@ -1,9 +1,9 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import database from '../../database/client.js';
+import database from '../../database/client.ts';
 import zod from 'zod';
 import { StatusCodes } from 'http-status-codes';
 import { BadInputError, ServerError } from 'service_library';
-import { NotFoundError } from '../../error.handler.js';
+import { NotFoundError } from '../../error.handler.ts';
 
 
 const createConversationScheme = zod.object({ title: zod.string(), user_id: zod.number() });

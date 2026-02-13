@@ -7,9 +7,9 @@ import {
   encodeHeaders
 } from 'service_library';
 
-import { type OutputRequest_ErrorBody_Type } from '../requests/completion.error.request.js';
-import { type OutputRequest_CompletionBody_Type, type OutputRequest_StreamCompletionBody_Type } from '../requests/completion.output.request.js';
-import { type UseCaseResultSingleValue, type UseCaseResultStreamValue } from '../use-cases/completion.use-case.js';
+import { type OutputRequest_ErrorBody_Type } from '../requests/completion.error.request.ts';
+import { type OutputRequest_CompletionBody_Type, type OutputRequest_StreamCompletionBody_Type } from '../requests/completion.output.request.ts';
+import { type UseCaseResultSingleValue, type UseCaseResultStreamValue } from '../use-cases/completion.use-case.ts';
 
 
 export class CompletionResponseEncoder implements ResponseEncoder<Response, UseCaseResultSingleValue, UseCaseResultStreamValue, Context> {

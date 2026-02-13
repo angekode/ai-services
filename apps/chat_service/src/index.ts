@@ -1,6 +1,6 @@
-import environment from './environment.js';
-import database from './database/client.js';
-import server from './server.js';
+import environment from './environment.ts';
+import database from './database/client.ts';
+import server from './server.ts';
 
 
 // Environnement

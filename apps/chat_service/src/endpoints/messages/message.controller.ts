@@ -1,7 +1,7 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import database from '../../database/client.js';
+import database from '../../database/client.ts';
 import { StatusCodes } from 'http-status-codes';
-import { NotFoundError } from '../../error.handler.js';
+import { NotFoundError } from '../../error.handler.ts';
 
 
 export default {

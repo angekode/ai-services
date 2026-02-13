@@ -8,12 +8,12 @@ import {
 } from 'service_library';
 
 
-import { type ConversationCompletionUseCaseResultSingleValue, type ConversationCompletionUseCaseResultStreamValue } from './use-case.js';
+import { type ConversationCompletionUseCaseResultSingleValue, type ConversationCompletionUseCaseResultStreamValue } from './use-case.ts';
 import { 
   type ConversationCompletionOutputRequestType, 
   type ConversationCompletionOutputRequestStreamType,
   type OutputRequest_ErrorBody_Type
-} from './output.request.js';
+} from './output.request.ts';
 import { StatusCodes } from 'http-status-codes';
 
 

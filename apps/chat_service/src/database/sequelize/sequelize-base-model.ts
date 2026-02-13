@@ -1,6 +1,6 @@
 import type { ModelInterface, GetOptions } from "../interfaces/model.interface.js";
 import { type ModelStatic, Model, Sequelize, UniqueConstraintError, DatabaseError } from "sequelize";
-import { ModelError, UniqueConstraintModelError, QueryModelError, NotFoundModelError } from '../interfaces/model-errors.js';
+import { ModelError, UniqueConstraintModelError, QueryModelError, NotFoundModelError } from '../interfaces/model-errors.ts';
 
 
 /**
