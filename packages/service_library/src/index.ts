@@ -1,29 +1,20 @@
-import express from 'express';
-import { handleCompletionRequest } from './controllers/completion.controller.js';
-import { validateChatCompletionHeader, validateChatCompletionBody } from './controllers/validation.controller.js';
-import { handleError } from './middleware/error.middleware.js';
+export { type Context, createContext } from './endpoint-base/context.type.js';
 
+export {
+  type RequestDecoder,
+  type UseCaseResult,
+  type UseCase,
+  type ResponseEncoder,
+  type ErrorEncoder,
+  createController
+} from './endpoint-base/endpoint.interface.js';
 
-// Config
+export {
+  BadInputError,
+  ServerError,
+  ProviderError
+} from './endpoint-base/error.js';
 
-const server = express();
-server.use(express.json());
-
-
-// Routes
-
-server.use((req, _res, next) => { console.log('Requête reçue: ' + req.url); next(); });
-
-server.get('/', (_req, res) => res.send('Serveur à l\'écoute'));
-
-server.post(
-  '/chat/completions',
-  validateChatCompletionHeader,
-  validateChatCompletionBody,
-  handleCompletionRequest
-);
-server.use(handleError);
-
-// Lancement
-
-server.listen(process.env.PORT, () => console.log(`Serveur lancé sur le port ${process.env.PORT}`));
+export {
+  encodeHeaders
+} from './endpoint-base/header.encoder.js';
