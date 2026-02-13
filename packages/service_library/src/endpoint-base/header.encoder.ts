@@ -1,5 +1,5 @@
 import type { Response } from 'express';
-import type { Context } from './context.type.js';
+import type { Context } from './context.type.ts';
 
 
 export function encodeHeaders(res: Response, context: Context) {

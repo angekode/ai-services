@@ -1,4 +1,4 @@
-export { type Context, createContext } from './endpoint-base/context.type.js';
+export { type Context, createContext } from './endpoint-base/context.type.ts';
 
 export {
   type RequestDecoder,
@@ -7,14 +7,14 @@ export {
   type ResponseEncoder,
   type ErrorEncoder,
   createController
-} from './endpoint-base/endpoint.interface.js';
+} from './endpoint-base/endpoint.interface.ts';
 
 export {
   BadInputError,
   ServerError,
   ProviderError
-} from './endpoint-base/error.js';
+} from './endpoint-base/error.ts';
 
 export {
   encodeHeaders
-} from './endpoint-base/header.encoder.js';
+} from './endpoint-base/header.encoder.ts';
