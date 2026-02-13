@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "node ./dist/index.js",
-    "test": "tsc --project tsconfig.test.json && node --env-file=.env.test ./dist-test/langchain-llm-client.test.js"
+    "test": "tsx --test --env-file=.env.test ./test/langchain-llm-client.test.ts"
   },
   "type": "module",
   "dependencies": {
@@ -19,6 +19,7 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@types/node": "^18.19.130"
+    "@types/node": "^18.19.130",
+    "tsx": "^4.21.0"
   }
 }
