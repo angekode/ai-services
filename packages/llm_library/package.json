@@ -1,5 +1,5 @@
 {
-  "name": "rag_library",
+  "name": "llm_library",
   "version": "0.0.1",
   "main": "dist/index.js",
   "scripts": {
