@@ -1,18 +1,14 @@
 {
-  "name": "ai-services",
+  "name": "chat_service",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
-  "workspaces": [
-    "packages/llm_library",
-    "packages/service_library",
-    "apps/chat_service"
-  ]
+  "type": "module"
 }
