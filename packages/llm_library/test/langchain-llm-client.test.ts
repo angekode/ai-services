@@ -1,4 +1,4 @@
-import { LangchainLLMClient } from '../dist/index.js';
+import { LangchainLLMClient } from '../dist/index.ts';
 
 const client = new LangchainLLMClient();
 const res = await client.infer(

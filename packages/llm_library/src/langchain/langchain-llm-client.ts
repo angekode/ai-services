@@ -11,12 +11,12 @@ import {
   type SimilarEmbeddingsOptions,
   type SimilarityResult
 
-} from "../llm-client-interface.js";
+} from "../llm-client-interface.ts";
 
-import ChatsModels from "./chat/chat-models.js";
+import ChatsModels from "./chat/chat-models.ts";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { BaseMessage } from "@langchain/core/messages";
-import EmbeddingsModels from "../langchain/embeddings/embeddings-models.js";
+import EmbeddingsModels from "../langchain/embeddings/embeddings-models.ts";
 import { cosineSimilarity } from "@langchain/core/utils/math";
 
 
