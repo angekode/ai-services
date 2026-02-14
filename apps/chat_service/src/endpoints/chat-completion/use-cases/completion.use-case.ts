@@ -1,5 +1,5 @@
-import { LangchainLLMClient } from 'rag_library';
-import type { InferStreamResult } from 'rag_library/dist/llm-client-interface.ts';
+import { LangchainLLMClient } from 'llm_library';
+import type { InferStreamResult } from 'llm_library/dist/llm-client-interface.ts';
 import { type UseCaseResult, type UseCase, ProviderError, ServerError } from 'service_library';
 import type { CompletionCommand } from '../types/completion.command.ts';
 

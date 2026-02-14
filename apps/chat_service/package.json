@@ -40,9 +40,9 @@
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.16.3",
     "pg-hstore": "^2.3.4",
-    "rag_library": "file:../rag_library",
+    "llm_library": "*",
     "sequelize": "^6.37.7",
-    "service_library": "file:../service_library",
+    "service_library": "*",
     "zod": "^4.3.4"
   }
 }
