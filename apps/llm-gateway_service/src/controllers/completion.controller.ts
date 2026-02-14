@@ -1,0 +1,42 @@
+import type { Request, Response, NextFunction } from 'express';
+
+import { ProviderError, ServerError } from '../error.ts';
+import type { InternalRequest } from '../requests/internal.request.ts';
+import { generateCompletion, generateCompletionStream } from '../services/llm.service.ts';
+import { writeOutputRequest_Completion, writeOutputRequests_StreamCompletion } from '../writers/completion.writer.ts';
+import { StatusCodes } from 'http-status-codes';
+
+
+export async function handleCompletionRequest(_req: Request, res: Response, next: NextFunction) {
+  if (!res.locals.ir) {
+    return next(new ServerError('Pas d\'objet InternalRequest dans l\'objet Response'));
+  }
+  const ir : InternalRequest = res.locals.ir;
+  if (!ir.input) {
+    return next(new ServerError('Pas d\'objet InternalRequestInput dans l\'objet InternalRequest'));
+  }
+
+  try {
+
+    if (ir.input.stream) {
+      const stream = generateCompletionStream(ir);
+      res.status(StatusCodes.OK);
+      await writeOutputRequests_StreamCompletion(res, ir, stream);
+
+    } else {
+      const result = await generateCompletion(ir);
+      if (result.type === 'error') {
+        next(new ProviderError(result.message));
+        return;
+      }
+
+      res.status(StatusCodes.OK);
+      writeOutputRequest_Completion(res, ir, result);
+      res.end();
+      return;
+    }
+
+  } catch (error) {
+    return next(error);
+  }
+}
