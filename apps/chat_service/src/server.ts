@@ -1,0 +1,30 @@
+import express from 'express';
+import mainRouter from './routes/main.router.ts';
+import { errorHandler } from './error.handler.ts';
+import cors from 'cors';
+import logMiddlewares from './middlewares/log.middleware.ts';
+import cookieParser from 'cookie-parser';
+
+
+export default {
+
+  app: express(),
+
+  init() {
+    
+    this.app.use(cors());
+    this.app.use(express.json());
+    this.app.use(cookieParser());
+
+    // Log
+    this.app.use(logMiddlewares.logRequest);
+    // Routes
+    this.app.use(mainRouter);
+    // Gestion de toutes les expceptions envoyées depuis les controlleurs (synchrones et asynchrones)
+    this.app.use(errorHandler);
+  },
+
+  run() {
+    this.app.listen(process.env.PORT, () => console.log(`Serveur lancé sur le port ${process.env.PORT}`));
+  }
+};
