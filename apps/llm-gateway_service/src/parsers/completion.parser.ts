@@ -1,8 +1,8 @@
 import type { Request } from 'express';
-import { BadInputError } from '../error.js';
-import { inputRequestBody_Completion_Scheme, INPUT_REQUEST_MODEL_PATTERN } from '../requests/input.request.js';
-import { createInternalRequestInput } from '../requests/internal.request.js';
-import type { InternalRequest } from '../requests/internal.request.js';
+import { BadInputError } from '../error.ts';
+import { inputRequestBody_Completion_Scheme, INPUT_REQUEST_MODEL_PATTERN } from '../requests/input.request.ts';
+import { createInternalRequestInput } from '../requests/internal.request.ts';
+import type { InternalRequest } from '../requests/internal.request.ts';
 
 
 export function parseInputRequest_completionBody(req: Request, internalRequest: InternalRequest) {

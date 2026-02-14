@@ -1,5 +1,5 @@
 import { type Response } from 'express';
-import type { OutputRequest_ErrorBody_Type } from '../requests/output.request.js';
+import type { OutputRequest_ErrorBody_Type } from '../requests/output.request.ts';
 
 
 /**

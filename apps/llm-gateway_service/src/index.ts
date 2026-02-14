@@ -1,7 +1,7 @@
 import express from 'express';
-import { handleCompletionRequest } from './controllers/completion.controller.js';
-import { validateChatCompletionHeader, validateChatCompletionBody } from './controllers/validation.controller.js';
-import { handleError } from './middleware/error.middleware.js';
+import { handleCompletionRequest } from './controllers/completion.controller.ts';
+import { validateChatCompletionHeader, validateChatCompletionBody } from './controllers/validation.controller.ts';
+import { handleError } from './middleware/error.middleware.ts';
 
 
 // Config

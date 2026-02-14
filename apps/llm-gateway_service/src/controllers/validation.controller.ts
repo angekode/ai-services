@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
 
-import { parseInputRequest_completionBody } from '../parsers/completion.parser.js';
-import { createInternalRequest, createInternalRequestInput} from '../requests/internal.request.js';
-import { BadInputError } from '../error.js';
+import { parseInputRequest_completionBody } from '../parsers/completion.parser.ts';
+import { createInternalRequest, createInternalRequestInput} from '../requests/internal.request.ts';
+import { BadInputError } from '../error.ts';
 
 
 export function validateChatCompletionHeader(req: Request, res: Response, next: NextFunction) {

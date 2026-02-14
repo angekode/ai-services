@@ -1,9 +1,9 @@
 import type { Response } from 'express';
 
-import { ServerError } from '../error.js';
-import type { InternalRequest } from '../requests/internal.request.js';
-import type { OutputRequest_CompletionBody_Type, OutputRequest_ErrorBody_Type, OutputRequest_StreamCompletionBody_Type } from '../requests/output.request.js';
-import type { CompletionResult, CompletionStreamResult } from '../services/llm.service.js';
+import { ServerError } from '../error.ts';
+import type { InternalRequest } from '../requests/internal.request.ts';
+import type { OutputRequest_CompletionBody_Type, OutputRequest_ErrorBody_Type, OutputRequest_StreamCompletionBody_Type } from '../requests/output.request.ts';
+import type { CompletionResult, CompletionStreamResult } from '../services/llm.service.ts';
 
 
 /**

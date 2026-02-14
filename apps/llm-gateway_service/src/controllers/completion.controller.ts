@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction } from 'express';
 
-import { ProviderError, ServerError } from '../error.js';
-import type { InternalRequest } from '../requests/internal.request.js';
-import { generateCompletion, generateCompletionStream } from '../services/llm.service.js';
-import { writeOutputRequest_Completion, writeOutputRequests_StreamCompletion } from '../writers/completion.writer.js';
+import { ProviderError, ServerError } from '../error.ts';
+import type { InternalRequest } from '../requests/internal.request.ts';
+import { generateCompletion, generateCompletionStream } from '../services/llm.service.ts';
+import { writeOutputRequest_Completion, writeOutputRequests_StreamCompletion } from '../writers/completion.writer.ts';
 import { StatusCodes } from 'http-status-codes';
 
 

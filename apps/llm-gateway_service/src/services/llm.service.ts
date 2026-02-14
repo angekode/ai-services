@@ -1,8 +1,8 @@
-import { LangchainLLMClient } from 'rag_library';
-import type { InferStreamResult } from 'rag_library/dist/llm-client-interface.js';
+import { LangchainLLMClient } from 'llm_library';
+import type { InferStreamResult } from 'llm_library/dist/llm-client-interface.ts';
 
-import { ServerError } from '../error.js';
-import type { InternalRequest } from '../requests/internal.request.js';
+import { ServerError } from '../error.ts';
+import type { InternalRequest } from '../requests/internal.request.ts';
 
 
 const llmClient = new LangchainLLMClient();

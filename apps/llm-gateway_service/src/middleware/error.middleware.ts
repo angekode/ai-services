@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { BadInputError, ServerError, ProviderError } from '../error.js';
-import { writeOutputRequest_Error } from '../writers/errors.writer.js';
+import { BadInputError, ServerError, ProviderError } from '../error.ts';
+import { writeOutputRequest_Error } from '../writers/errors.writer.ts';
 
 export function handleError(error: any, _req: Request, res: Response, _next: NextFunction) {
   /*
