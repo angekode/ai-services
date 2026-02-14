@@ -14,6 +14,7 @@
     "packages/llm_library",
     "packages/service_library",
     "apps/chat_service",
-    "apps/chat_ui"
+    "apps/chat_ui",
+    "apps/llm-gateway_service"
   ]
 }
