@@ -8,7 +8,7 @@ try {
   environment.init();
   console.log('Environnement chargé avec succés');
 } catch (error: unknown) {
-  console.error(error instanceof Error ? console.error(error.message) : String(error));
+  console.error(error instanceof Error ? error.message : String(error));
   process.exit(0);
 }
 

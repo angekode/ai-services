@@ -14,6 +14,9 @@ export class ConversationCompletionRequestDecoder implements RequestDecoder<Requ
       throw new BadInputError('l\'id de la conversation n\'est pas valide');
     }
     const validatedRequest = conversationCompletionScheme.parse(req.body);
+    if (typeof req.params.conversationId !== 'string') {
+      throw new BadInputError('l\'id de la conversation n\'est pas valide');
+    }
     const command : ConversationCompletionCommand = {
       stream: validatedRequest.stream,
       conversationId: req.params.conversationId
