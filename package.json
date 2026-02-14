@@ -13,6 +13,7 @@
   "workspaces": [
     "packages/llm_library",
     "packages/service_library",
-    "apps/chat_service"
+    "apps/chat_service",
+    "apps/chat_ui"
   ]
 }
