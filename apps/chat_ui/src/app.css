@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import './assets/markdown.css';
+
+:root {
+  --gap: 0.5rem;
+  --background-color: hsl(225, 35%, 8%);
+  --dark-background-color: hsl(225, 50%, 7%);
+  --background-gradient: linear-gradient(0deg, hsl(225, 30%, 8%), hsl(225, 40%, 10%));
+  --border-color: hsl(225, 35%, 15%);
+  --pane-radius: 12px;
+  
+  --glow-color: hsla(230, 100%, 15%, 0.30);
+  --glow-color-focus: hsla(230, 100%, 15%, 0.70);
+
+  --input-radius: 9px;
+  --input-text-color: hsl(225, 100%, 96%);
+  --input-background-color: hsl(225, 35%, 10%);
+  --input-background-color-focus: hsl(225, 35%, 12%);
+
+  --user-bubble-background-color: hsl(220, 68%, 46%);
+  --user-bubble-border-color: hsl(220, 68%, 56%);
+  --user-bubble-date-color: hsl(220, 68%, 30%);
+
+  --assistant-bubble-background-color: hsl(220, 16%, 15%);
+  --assistant-bubble-border-color: hsl(225, 16%, 23%);
+  --assistant-bubble-date-color: hsl(225, 16%, 20%);
+
+  --text-color: hsl(225, 100%, 96%);
+  --dark-text-color: hsl(225, 30%, 70%);
+
+  --highlight-color: hsl(180, 100%, 50%);
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  background-color: var(--background-color);
+}
+
+input {
+  font-family: "Roboto", sans-serif;
+}
+
+#app{
+  width: calc(100% - 2 * var(--gap));
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--gap);
+  height: calc(100dvh - 2 * var(--gap));
+}
+
