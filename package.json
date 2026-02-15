@@ -6,7 +6,9 @@
   "scripts": {
     "workspaces:build": "npm run build --workspaces --if-present",
     "docker:build:chat_service": "docker build -f apps/chat_service/Dockerfile . -t chat_service:v1",
-    "docker:run:chat_service": "docker run -p 3005:3000 --env-file=./apps/chat_service/.env.docker chat_service:v1"
+    "docker:run:chat_service": "docker run -p 3005:3000 --env-file=./apps/chat_service/.env.docker chat_service:v1",
+    "docker:compose:build": "docker compose --env-file=.env.docker build",
+    "docker:compose:up": "docker compose --env-file=.env.docker up"
   },
   "keywords": [],
   "author": "",

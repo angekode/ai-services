@@ -52,7 +52,8 @@ COPY --from=building /repo/packages/service_library ./packages/service_library
 COPY --from=building /repo/apps/chat_service/dist ./dist
 COPY --from=building /repo/apps/chat_service/package.json ./package.json
 
-EXPOSE 3000
+ARG PORT
+EXPOSE ${PORT}
 
 CMD ["node", "dist/index.js"]
 
