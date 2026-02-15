@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "docker:build-app": "tsc",
+    "docker:start-app": "node ./dist/index.js",
+    "docker:build-image": "docker build . --env-file=.env.docker -t chat_service",
+    "docker:run-image": "docker run--env-file=.env.docker chat_service:latest",
     "build": "tsc",
     "dev": "node --env-file=.env ./dist/index.js",
     "db:create": "node --env-file=.env ./dist/database/migrations/01.create-tables.js",
