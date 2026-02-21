@@ -15,6 +15,9 @@ services:
       LLM_PROVIDER: ${CHATSERVICE_LLM_PROVIDER}
       LLM_MODEL: ${CHATSERVICE_LLM_MODEL}
       LLM_KEY: ${CHATSERVICE_LLM_KEY}
+    depends_on:
+      database:
+        condition: service_healthy
     networks:
       - ai-services
   database:
@@ -26,6 +29,11 @@ services:
     ports:
       - ${DATABASE_HOST_PORT}:${DATABASE_CONTAINER_PORT}
     container_name: ai-service_database
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGUSER} -d ${PGDATABASE}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     networks:
       - ai-services
 
