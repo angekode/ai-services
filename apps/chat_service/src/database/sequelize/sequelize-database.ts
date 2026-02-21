@@ -114,6 +114,7 @@ export class SequelizeDatabase implements DatabaseInterface {
     this.conversationModel.init();
     this.messageModel = new MessageModel(this.#client);
     this.messageModel.init();
+    console.log('Tables crées');
   }
 
 

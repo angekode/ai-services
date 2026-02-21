@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "workspaces:build": "npm run build --workspaces --if-present"
+    "workspaces:build": "npm run build --workspaces --if-present",
+    "docker:compose:build": "docker compose --env-file=.env.docker build",
+    "docker:compose:up": "docker compose --env-file=.env.docker up"
   },
   "keywords": [],
   "author": "",
