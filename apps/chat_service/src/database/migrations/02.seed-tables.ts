@@ -1,4 +1,8 @@
 import { SequelizeDatabase } from "../sequelize/sequelize-database.js";
+import environment from "../../environment.ts";
+
+
+environment.init();
 
 const client = new SequelizeDatabase();
 await client.connect();
@@ -9,3 +13,5 @@ await client.conversationModel?.model?.create({ title: 'Les chats', user_id: 1 }
 await client.conversationModel?.model?.create({ title: 'Les Avengers', user_id: 2 });
 
 await client.close();
+
+console.log('Données injectées dans les tables');

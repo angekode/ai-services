@@ -30,7 +30,7 @@ services:
       - ${DATABASE_HOST_PORT}:${DATABASE_CONTAINER_PORT}
     container_name: ai-service_database
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${PGUSER} -d ${PGDATABASE}"]
+      test: ["CMD-SHELL", "pg_isready -U $DATABASE_PG_USER -d $DATABASE_PG_DATABASE"]
       interval: 5s
       timeout: 3s
       retries: 5
